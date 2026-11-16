@@ -1,0 +1,745 @@
+/* =========================================================
+   HOSPITAL ADMIN SYSTEM - DASHBOARD & HUMAN-IN-THE-LOOP UI
+   ========================================================= */
+
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Row 1: Stat Cards */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-subtle);
+  flex-shrink: 0;
+}
+
+.stat-icon-wrap svg {
+  stroke: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 3px 0;
+}
+
+.stat-subtext {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+/* Row 2: Mid Analytics & Today's Overview */
+.mid-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1.35fr;
+  gap: 24px;
+}
+
+/* Donut Chart */
+.donut-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0 20px;
+}
+
+.donut-chart {
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--primary) 0% 50%,
+    var(--primary-soft) 50% 78%,
+    var(--accent-amber) 78% 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-hole {
+  width: 75px;
+  height: 75px;
+  background-color: var(--bg-card);
+  border-radius: 50%;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Mini Appointment Queue */
+.appointment-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.appointment-mini-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.patient-snippet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-name-diag h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.patient-name-diag p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.time-badge {
+  background-color: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.time-badge.ongoing {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+/* Next Patient Focus Card */
+.next-patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.next-patient-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.patient-id-badge {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.patient-id-badge span {
+  display: block;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background-color: var(--bg-subtle);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+}
+
+.vital-item p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.vital-item strong {
+  font-size: 0.78rem;
+  color: var(--text-main);
+  display: block;
+  margin-top: 2px;
+}
+
+.history-tags {
+  margin-bottom: 16px;
+}
+
+.history-tags p {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.tags-container {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-badge {
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.tag-amber { background: var(--accent-amber-soft); color: #b45309; }
+.tag-blue  { background: var(--primary-soft); color: var(--primary); }
+.tag-red   { background: var(--accent-red-soft); color: #b91c1c; }
+
+.patient-actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-call {
+  background-color: var(--primary);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-grow: 1;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.btn-call:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.74rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-subtle);
+}
+
+/* Row 3: Bottom Triaging & HITL Queue */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1.35fr;
+  gap: 24px;
+}
+
+/* Patient Review Bars */
+.review-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.review-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  gap: 12px;
+}
+
+.review-progress {
+  flex: 1;
+  height: 6px;
+  background-color: #f1f5f9;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+/* Human-in-the-Loop Request Queue */
+.request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.request-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.request-item:last-child {
+  border-bottom: none;
+}
+
+.request-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.urgency-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.urgency-high   { background-color: var(--accent-red); }
+.urgency-medium { background-color: var(--accent-amber); }
+.urgency-low    { background-color: var(--accent-green); }
+
+.hitl-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn-mini {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  transition: var(--transition-smooth);
+}
+
+.action-btn-mini:hover {
+  transform: scale(1.1);
+}
+
+.btn-approve { background: var(--accent-green-soft); color: var(--accent-green); }
+.btn-decline { background: var(--accent-red-soft); color: var(--accent-red); }
+.btn-review  { background: var(--primary-soft); color: var(--primary); }
+
+/* Calendar Widget */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.calendar-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+
+.calendar-table td {
+  padding: 6px 0;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.calendar-table td.muted-date {
+  color: #cbd5e1;
+}
+
+.calendar-table td.active-date {
+  color: var(--primary);
+  font-weight: 700;
+  position: relative;
+}
+
+.calendar-table td.active-date::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* =========================================================
+   HUMAN-IN-THE-LOOP TRIAGE MODAL OVERLAY
+   ========================================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-container {
+  background: var(--bg-card);
+  width: 540px;
+  max-width: 92vw;
+  border-radius: var(--radius-card);
+  padding: 26px;
+  box-shadow: var(--shadow-modal);
+  transform: translateY(16px);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.active .modal-container {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.btn-close {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.triage-details {
+  background: var(--bg-subtle);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.triage-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.triage-label {
+  color: var(--text-muted);
+}
+
+.triage-val {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.form-select, .form-textarea {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  background: #ffffff;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 55px;
+}
+
+.modal-dispatch-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-confirm-dispatch {
+  flex: 1;
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-confirm-dispatch:hover {
+  background-color: var(--primary-hover);
+}
+
+/* =========================================================
+   DASHBOARD GRID — RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+/* ── Large Laptop (≤ 1280px) ────────────────────────────── */
+@media (max-width: 1280px) {
+  .mid-row {
+    grid-template-columns: 1fr 1.1fr 1.2fr;
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr 1.1fr 1.2fr;
+  }
+}
+
+/* ── Medium Laptop (≤ 1024px) ───────────────────────────── */
+@media (max-width: 1024px) {
+  .stat-row {
+    gap: 16px;
+  }
+
+  .mid-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Patient summary (donut) spans both columns on tablet */
+  .mid-row .card:first-child {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .mid-row .card:first-child .donut-container {
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Calendar spans full row on medium tablet */
+  .bottom-row .card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .patient-actions-row {
+    flex-wrap: wrap;
+  }
+
+  .btn-call {
+    flex-grow: 1;
+    min-width: 140px;
+  }
+}
+
+/* ── Tablet Portrait (≤ 768px) ──────────────────────────── */
+@media (max-width: 768px) {
+  .stat-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .mid-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Reset donut card horizontal layout */
+  .mid-row .card:first-child {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .bottom-row .card:last-child {
+    grid-column: auto;
+  }
+
+  .vitals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tags-container {
+    flex-wrap: wrap;
+  }
+
+  /* Modal full-width on mobile */
+  .modal-container {
+    width: 100%;
+    max-width: 96vw;
+    padding: 20px 18px;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-dispatch-actions {
+    flex-direction: column;
+  }
+
+  .modal-dispatch-actions .btn-secondary,
+  .modal-dispatch-actions .btn-confirm-dispatch {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .next-patient-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .patient-id-badge {
+    text-align: left;
+  }
+}
+
+/* ── Mobile (≤ 480px) ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .dashboard-grid {
+    gap: 14px;
+  }
+
+  .stat-row,
+  .mid-row,
+  .bottom-row {
+    gap: 12px;
+  }
+
+  .donut-chart {
+    width: 120px;
+    height: 120px;
+  }
+
+  .donut-hole {
+    width: 60px;
+    height: 60px;
+  }
+
+  .vitals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .patient-actions-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-call,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .review-line span {
+    font-size: 0.7rem;
+    width: 48px !important;
+  }
+
+  .action-btn-mini {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .calendar-table td,
+  .calendar-table th {
+    font-size: 0.7rem;
+    padding: 5px 2px;
+  }
+
+  .triage-details {
+    font-size: 0.78rem;
+  }
+
+  .triage-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

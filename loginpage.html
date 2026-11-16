@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrusTedCares Hospital - Sign In</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Identity Services (OAuth / SSO) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a62d6; /* Reference vibrant royal blue */
+    }
+
+    /* 3D Shaded Spheres using pure CSS radial gradients */
+    .sphere-3d-primary {
+      background: radial-gradient(circle at 35% 30%, #5ca5ff 0%, #2876f0 38%, #114bb8 72%, #082974 100%);
+      box-shadow: 
+        0 20px 45px rgba(2, 24, 77, 0.45),
+        inset -8px -8px 18px rgba(3, 19, 64, 0.4),
+        inset 6px 6px 14px rgba(255, 255, 255, 0.4);
+    }
+
+    .sphere-3d-secondary {
+      background: radial-gradient(circle at 35% 30%, #4b97ff 0%, #1e67e3 42%, #0e44ad 75%, #082872 100%);
+      box-shadow: 
+        0 18px 40px rgba(2, 24, 77, 0.4),
+        inset -6px -6px 16px rgba(3, 19, 64, 0.35),
+        inset 5px 5px 12px rgba(255, 255, 255, 0.35);
+    }
+
+    .sphere-3d-corner {
+      background: radial-gradient(circle at 32% 30%, #4d98ff 0%, #206ae6 42%, #0e44ad 78%, #082872 100%);
+      box-shadow: 
+        -10px -10px 30px rgba(14, 68, 173, 0.25),
+        inset -5px -5px 15px rgba(3, 19, 64, 0.3),
+        inset 4px 4px 10px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Soft pulse animation for rate-limit warning */
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.88; transform: scale(0.99); }
+    }
+    .rate-limit-active {
+      animation: gentlePulse 1.8s infinite ease-in-out;
+    }
+
+    /* Input shake animation on invalid alphabetic entry */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    .shake-error {
+      animation: shake 0.35s ease-in-out;
+    }
+
+    /* Custom form input styling */
+    .custom-input {
+      background-color: #f4f6fa;
+      transition: all 0.2s ease;
+    }
+    .custom-input:focus {
+      background-color: #ffffff;
+      box-shadow: 0 0 0 2px #103b7b;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 selection:bg-blue-200 selection:text-blue-900">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Main Card Container -->
+  <main class="w-full max-w-[960px] bg-white rounded-[28px] shadow-[0_25px_65px_-12px_rgba(4,22,68,0.55)] overflow-hidden flex flex-col md:flex-row relative">
+
+    <!-- ============================================== -->
+    <!-- LEFT PANEL: Brand & Abstract 3D Spheres       -->
+    <!-- ============================================== -->
+    <section class="relative w-full md:w-[46%] bg-[#0e52c8] overflow-hidden p-8 sm:p-10 md:p-12 flex flex-col justify-between min-h-[380px] md:min-h-[580px] select-none text-white">
+      
+      <!-- Layered Circular Background Backdrops -->
+      <div class="absolute -top-16 -right-20 w-80 h-80 rounded-full bg-[#135ddc] opacity-80 pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-20 w-88 h-88 rounded-full bg-[#0a46ae] opacity-90 pointer-events-none"></div>
+
+      <!-- 3D Shaded Spheres (Matching Reference Image) -->
+      <!-- Lower-left Sphere -->
+      <div class="absolute -bottom-16 -left-12 w-52 h-52 rounded-full sphere-3d-secondary pointer-events-none z-10 transition-transform duration-700 hover:scale-105"></div>
+      
+      <!-- Central Dominant Floating Sphere -->
+      <div class="absolute bottom-16 right-[-28px] w-52 h-52 sm:w-60 sm:h-60 rounded-full sphere-3d-primary pointer-events-none z-10 transition-transform duration-700 hover:scale-105"></div>
+
+      <!-- Brand Copy Content -->
+      <div class="relative z-20 mt-4 md:mt-12">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wider leading-none text-white drop-shadow-sm">
+          WELCOME
+        </h1>
+        <h2 class="text-xs sm:text-sm font-bold tracking-widest uppercase mt-3 text-blue-100/90">
+          TrusTedCares Hospital
+        </h2>
+        <p class="text-xs sm:text-[13px] text-blue-100/75 leading-relaxed mt-4 max-w-[280px] font-normal">
+          Empowering patient care and clinical excellence. Sign in to seamlessly manage healthcare records, staff schedules, and clinical diagnostics.
+        </p>
+      </div>
+
+      <!-- Subtle Security Assurance Badge -->
+      <div class="relative z-20 flex items-center gap-2 pt-6 text-[11px] text-blue-200/70 font-medium">
+        <svg class="w-4 h-4 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+        <span>HIPAA Compliant &amp; 256-bit Encrypted</span>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- RIGHT PANEL: Sign In Form & Controls          -->
+    <!-- ============================================== -->
+    <section class="relative w-full md:w-[54%] bg-white p-7 sm:p-10 md:p-12 flex flex-col justify-center">
+
+      <!-- Form Header -->
+      <div class="mb-6">
+        <h3 class="text-2xl sm:text-[28px] font-bold text-slate-800 tracking-tight">
+          Sign in
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">
+          Please enter your credentials to access the medical portal.
+        </p>
+      </div>
+
+      <!-- Rate Limit Alert Banner (Hidden by default) -->
+      <div id="lockoutBanner" class="hidden mb-5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs rate-limit-active">
+        <div class="flex items-center gap-2 font-semibold">
+          <svg class="w-4 h-4 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Account Temporarily Locked</span>
+        </div>
+        <p class="mt-1 text-red-600/90 text-[11px]" id="lockoutTimerText">
+          3 consecutive failed attempts detected. Please try again in 30 seconds.
+        </p>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="loginForm" class="space-y-4" novalidate>
+        
+        <!-- Field 1: User Name (Alphabetic ONLY validation) -->
+        <div>
+          <div id="usernameInputWrapper" class="relative flex items-center custom-input rounded-xl border border-transparent transition-all">
+            <!-- Icon -->
+            <span class="pl-4 pr-2 text-slate-400">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <!-- Input -->
+            <input 
+              type="text" 
+              id="usernameInput" 
+              placeholder="User Name" 
+              autocomplete="name"
+              required 
+              class="w-full bg-transparent py-3 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+            >
+          </div>
+          <!-- Validation Message Container -->
+          <div id="usernameError" class="hidden text-[11px] text-rose-500 font-medium mt-1 pl-1 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span id="usernameErrorText">Only alphabetic letters (A-Z) and single spaces are allowed.</span>
+          </div>
+        </div>
+
+        <!-- Field 2: Password (Letters, numbers, special characters) -->
+        <div>
+          <div id="passwordInputWrapper" class="relative flex items-center custom-input rounded-xl border border-transparent transition-all">
+            <!-- Icon -->
+            <span class="pl-4 pr-2 text-slate-400">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+              </svg>
+            </span>
+            <!-- Input -->
+            <input 
+              type="password" 
+              id="passwordInput" 
+              placeholder="Password" 
+              autocomplete="current-password"
+              required 
+              class="w-full bg-transparent py-3 pr-16 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+            >
+            <!-- Show / Hide Toggle Button -->
+            <button 
+              type="button" 
+              id="togglePasswordBtn" 
+              aria-label="Toggle password visibility"
+              class="absolute right-3 text-[11px] font-bold text-slate-500 hover:text-slate-800 tracking-wider px-2 py-1 rounded transition-colors uppercase"
+            >
+              SHOW
+            </button>
+          </div>
+          <!-- Password Error message -->
+          <div id="passwordError" class="hidden text-[11px] text-rose-500 font-medium mt-1 pl-1 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span id="passwordErrorText">Please enter your password.</span>
+          </div>
+        </div>
+
+        <!-- Row: Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between text-[11px] sm:text-xs pt-1 pb-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none text-slate-500 hover:text-slate-700">
+            <input 
+              type="checkbox" 
+              id="rememberMe" 
+              class="w-3.5 h-3.5 rounded border-slate-300 text-[#103b7b] focus:ring-[#103b7b] accent-[#103b7b] cursor-pointer"
+            >
+            <span>Remember me</span>
+          </label>
+          <button 
+            type="button" 
+            id="openForgotModalBtn" 
+            class="text-slate-500 hover:text-[#103b7b] font-medium transition-colors hover:underline focus:outline-none"
+          >
+            Forgot Password?
+          </button>
+        </div>
+
+        <!-- Primary Submit Button -->
+        <button 
+          type="submit" 
+          id="signInBtn" 
+          class="w-full py-3 px-4 bg-[#103b7b] hover:bg-[#0c2f63] active:scale-[0.99] text-white text-sm font-semibold rounded-xl transition duration-150 shadow-md shadow-blue-900/10 flex items-center justify-center gap-2"
+        >
+          <span id="signInBtnText">Sign in</span>
+          <svg id="signInSpinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+        </button>
+
+      </form>
+
+      <!-- Divider: "or" -->
+      <div class="relative my-4 flex items-center justify-center">
+        <div class="w-full border-t border-slate-200"></div>
+        <span class="absolute bg-white px-3 text-[11px] text-slate-400 font-medium">or</span>
+      </div>
+
+      <!-- Secondary Sign In with Google -->
+      <button 
+        type="button" 
+        id="googleSignInBtn" 
+        class="w-full py-2.5 px-4 bg-white border border-slate-700 hover:bg-slate-50 active:scale-[0.99] text-slate-700 text-xs sm:text-sm font-medium rounded-xl transition duration-150 flex items-center justify-center gap-2.5 shadow-sm"
+      >
+        <!-- Google Logo SVG -->
+        <svg class="w-4 h-4" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.87c2.27-2.09 3.67-5.17 3.67-9.15z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.87-3.05c-1.08.72-2.45 1.16-4.06 1.16-3.13 0-5.78-2.11-6.73-4.96H1.28v3.15C3.25 21.3 7.31 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.28C.47 8.24 0 10.06 0 12s.47 3.76 1.28 5.39l3.99-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.28 6.61l3.99 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+
+      <!-- Footer: Sign Up Link -->
+      <div class="mt-6 text-center text-[11px] text-slate-400">
+        <span>Don't have an account? </span>
+        <button type="button" id="signUpLink" class="text-[#103b7b] font-semibold hover:underline">
+          Sign up
+        </button>
+      </div>
+
+      <!-- Demo Credentials Hint (collapsible / unobtrusive) -->
+      <div class="mt-4 p-2 bg-slate-50 border border-slate-100 rounded-lg text-[10px] text-slate-500 flex justify-between items-center">
+        <span><strong>Demo Doctor:</strong> <code class="text-blue-700">Dr Sarah Jenkins</code> / <code class="text-blue-700">Health@2026!</code></span>
+        <button id="quickFillBtn" type="button" class="text-blue-600 hover:underline font-semibold ml-2">Autofill</button>
+      </div>
+
+      <!-- Decorative Sphere in the Bottom-Right Corner (Exact match to inspo) -->
+      <div class="absolute -bottom-10 -right-10 w-28 h-28 rounded-full sphere-3d-corner pointer-events-none z-10 opacity-95"></div>
+
+    </section>
+
+  </main>
+
+  <!-- ============================================== -->
+  <!-- MODAL: Forgot & Reset Password Flow           -->
+  <!-- ============================================== -->
+  <div id="forgotModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-200">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden transform transition-all">
+      
+      <!-- Close Button -->
+      <button id="closeForgotModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- STEP 1: Enter Email -->
+      <div id="forgotStep1" class="space-y-4">
+        <div class="w-12 h-12 bg-blue-50 text-[#103b7b] rounded-full flex items-center justify-center mb-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+          </svg>
+        </div>
+        <h4 class="text-xl font-bold text-slate-800">Reset your password</h4>
+        <p class="text-xs text-slate-500">
+          Enter your registered hospital email address. We'll send you a secure verification code to reset your credentials.
+        </p>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Hospital Email</label>
+          <input 
+            type="email" 
+            id="resetEmailInput" 
+            placeholder="doctor.name@trustedcares.org"
+            class="w-full custom-input rounded-xl py-2.5 px-3.5 text-sm text-slate-800 border border-slate-200 focus:outline-none"
+          >
+          <p id="resetEmailError" class="hidden text-[11px] text-rose-500 mt-1">Please enter a valid email address.</p>
+        </div>
+
+        <button 
+          id="sendCodeBtn" 
+          type="button" 
+          class="w-full py-2.5 px-4 bg-[#103b7b] hover:bg-[#0c2f63] text-white text-sm font-semibold rounded-xl transition duration-150"
+        >
+          Send Verification Code
+        </button>
+      </div>
+
+      <!-- STEP 2: Enter Verification Code & New Password -->
+      <div id="forgotStep2" class="space-y-4 hidden">
+        <div class="w-12 h-12 bg-blue-50 text-[#103b7b] rounded-full flex items-center justify-center mb-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h4 class="text-xl font-bold text-slate-800">Set New Password</h4>
+        <p class="text-xs text-slate-500">
+          Enter the 6-digit code sent to your email along with your new secure password.
+        </p>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Verification Code (Demo: 123456)</label>
+          <input 
+            type="text" 
+            id="resetCodeInput" 
+            placeholder="123456" 
+            maxlength="6"
+            class="w-full custom-input rounded-xl py-2.5 px-3.5 text-sm font-mono tracking-widest text-slate-800 border border-slate-200 focus:outline-none"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">New Password</label>
+          <input 
+            type="password" 
+            id="newPasswordInput" 
+            placeholder="Letters, numbers &amp; symbols (min 6 chars)"
+            class="w-full custom-input rounded-xl py-2.5 px-3.5 text-sm text-slate-800 border border-slate-200 focus:outline-none"
+          >
+          <p id="newPasswordError" class="hidden text-[11px] text-rose-500 mt-1">Must contain letters, numbers, or symbols (min 6 characters).</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Confirm New Password</label>
+          <input 
+            type="password" 
+            id="confirmPasswordInput" 
+            placeholder="Re-enter new password"
+            class="w-full custom-input rounded-xl py-2.5 px-3.5 text-sm text-slate-800 border border-slate-200 focus:outline-none"
+          >
+          <p id="confirmPasswordError" class="hidden text-[11px] text-rose-500 mt-1">Passwords do not match.</p>
+        </div>
+
+        <button 
+          id="saveNewPasswordBtn" 
+          type="button" 
+          class="w-full py-2.5 px-4 bg-[#103b7b] hover:bg-[#0c2f63] text-white text-sm font-semibold rounded-xl transition duration-150"
+        >
+          Update Password
+        </button>
+      </div>
+
+      <!-- STEP 3: Success Confirmation -->
+      <div id="forgotStep3" class="space-y-4 text-center hidden py-4">
+        <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h4 class="text-xl font-bold text-slate-800">Password Reset Complete</h4>
+        <p class="text-xs text-slate-500 max-w-xs mx-auto">
+          Your credentials have been securely updated. You can now sign in with your new password.
+        </p>
+        <button 
+          id="backToLoginBtn" 
+          type="button" 
+          class="w-full py-2.5 px-4 bg-[#103b7b] hover:bg-[#0c2f63] text-white text-sm font-semibold rounded-xl transition duration-150"
+        >
+          Return to Sign in
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT LOGIC & HANDLERS                    -->
+  <!-- ============================================== -->
+  <script>
+    // Configuration
+    // Replace with your real Google Client ID when ready:
+    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+
+    // Application State
+    const state = {
+      // Valid mock credentials for the hospital demo
+      validUser: {
+        name: "Dr Sarah Jenkins",
+        password: "Health@2026!"
+      },
+      failedAttempts: 0,
+      maxAttempts: 3,
+      lockoutDurationSeconds: 30,
+      lockoutTimer: null,
+      isLockedOut: false,
+      lockoutEndTime: null
+    };
+
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('usernameInput');
+    const usernameWrapper = document.getElementById('usernameInputWrapper');
+    const usernameError = document.getElementById('usernameError');
+    const usernameErrorText = document.getElementById('usernameErrorText');
+
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordWrapper = document.getElementById('passwordInputWrapper');
+    const passwordError = document.getElementById('passwordError');
+    const passwordErrorText = document.getElementById('passwordErrorText');
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+
+    const signInBtn = document.getElementById('signInBtn');
+    const signInBtnText = document.getElementById('signInBtnText');
+    const signInSpinner = document.getElementById('signInSpinner');
+
+    const lockoutBanner = document.getElementById('lockoutBanner');
+    const lockoutTimerText = document.getElementById('lockoutTimerText');
+
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const quickFillBtn = document.getElementById('quickFillBtn');
+    const toastContainer = document.getElementById('toastContainer');
+
+    // Forgot Password Modal Elements
+    const openForgotModalBtn = document.getElementById('openForgotModalBtn');
+    const forgotModal = document.getElementById('forgotModal');
+    const closeForgotModalBtn = document.getElementById('closeForgotModalBtn');
+    const forgotStep1 = document.getElementById('forgotStep1');
+    const forgotStep2 = document.getElementById('forgotStep2');
+    const forgotStep3 = document.getElementById('forgotStep3');
+    const resetEmailInput = document.getElementById('resetEmailInput');
+    const resetEmailError = document.getElementById('resetEmailError');
+    const sendCodeBtn = document.getElementById('sendCodeBtn');
+    const resetCodeInput = document.getElementById('resetCodeInput');
+    const newPasswordInput = document.getElementById('newPasswordInput');
+    const newPasswordError = document.getElementById('newPasswordError');
+    const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+    const saveNewPasswordBtn = document.getElementById('saveNewPasswordBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
+
+    // -------------------------------------------------------------
+    // Helper: Toast Notification (replacing prohibited alert())
+    // -------------------------------------------------------------
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `px-4 py-3 rounded-xl shadow-lg text-xs font-medium text-white flex items-center gap-2 pointer-events-auto transform transition-all duration-300 translate-y-2 opacity-0 ${
+        type === 'success' ? 'bg-emerald-600' :
+        type === 'error' ? 'bg-rose-600' :
+        type === 'warning' ? 'bg-amber-600' : 'bg-slate-800'
+      }`;
+      
+      const iconSvg = type === 'success' 
+        ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
+        : type === 'error'
+        ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        : '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+
+      toast.innerHTML = `${iconSvg}<span>${message}</span>`;
+      toastContainer.appendChild(toast);
+
+      // Trigger entrance transition
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+      });
+
+      // Auto dismiss after 3.5s
+      setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // -------------------------------------------------------------
+    // Requirement 1: User Name ONLY Alphabetic validation
+    // Allowed: A-Z, a-z, and single spaces between words
+    // -------------------------------------------------------------
+    function validateNameInput(str) {
+      if (!str || str.trim().length === 0) {
+        return { valid: false, message: "Please enter your user name." };
+      }
+      // Strictly alphabet characters and spaces only
+      const alphabetOnlyRegex = /^[A-Za-z\s]+$/;
+      if (!alphabetOnlyRegex.test(str)) {
+        return { 
+          valid: false, 
+          message: "Name can only contain alphabetic letters (A-Z, a-z) and spaces." 
+        };
+      }
+      if (str.trim().length < 2) {
+        return { valid: false, message: "Name must be at least 2 characters long." };
+      }
+      return { valid: true };
+    }
+
+    // Live validation feedback as user types
+    usernameInput.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (!val) {
+        usernameError.classList.add('hidden');
+        usernameWrapper.classList.remove('border-rose-400');
+        return;
+      }
+      
+      const res = validateNameInput(val);
+      if (!res.valid) {
+        usernameErrorText.textContent = res.message;
+        usernameError.classList.remove('hidden');
+        usernameWrapper.classList.add('border-rose-400', 'shake-error');
+        setTimeout(() => usernameWrapper.classList.remove('shake-error'), 400);
+      } else {
+        usernameError.classList.add('hidden');
+        usernameWrapper.classList.remove('border-rose-400');
+      }
+    });
+
+    // -------------------------------------------------------------
+    // Requirement 2: Password Visibility Toggle
+    // -------------------------------------------------------------
+    togglePasswordBtn.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePasswordBtn.textContent = isPassword ? 'HIDE' : 'SHOW';
+    });
+
+    // -------------------------------------------------------------
+    // Requirement 3: Rate Limiting (3 Failed Attempts -> 30s Lockout)
+    // -------------------------------------------------------------
+    function startLockout(durationSeconds) {
+      state.isLockedOut = true;
+      const lockoutEndsAt = Date.now() + (durationSeconds * 1000);
+      state.lockoutEndTime = lockoutEndsAt;
+
+      // Persist in sessionStorage so page reload cannot bypass
+      sessionStorage.setItem('trustedCares_lockoutEnd', lockoutEndsAt);
+
+      // Disable inputs & submit button
+      usernameInput.disabled = true;
+      passwordInput.disabled = true;
+      signInBtn.disabled = true;
+      signInBtn.classList.add('opacity-60', 'cursor-not-allowed');
+
+      lockoutBanner.classList.remove('hidden');
+
+      function updateCountdown() {
+        const remainingMs = state.lockoutEndTime - Date.now();
+        const remainingSec = Math.max(0, Math.ceil(remainingMs / 1000));
+
+        if (remainingSec <= 0) {
+          clearInterval(state.lockoutTimer);
+          liftLockout();
+        } else {
+          lockoutTimerText.textContent = `Too many failed login attempts. Form locked. Please wait ${remainingSec}s to retry.`;
+        }
+      }
+
+      updateCountdown();
+      state.lockoutTimer = setInterval(updateCountdown, 1000);
+    }
+
+    function liftLockout() {
+      state.isLockedOut = false;
+      state.failedAttempts = 0;
+      sessionStorage.removeItem('trustedCares_lockoutEnd');
+
+      usernameInput.disabled = false;
+      passwordInput.disabled = false;
+      signInBtn.disabled = false;
+      signInBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+
+      lockoutBanner.classList.add('hidden');
+      showToast("Lockout period ended. You may now attempt to sign in again.", "info");
+    }
+
+    // Check on startup if an active lockout exists in session
+    function checkExistingLockout() {
+      const storedLockout = sessionStorage.getItem('trustedCares_lockoutEnd');
+      if (storedLockout) {
+        const remainingSec = Math.ceil((parseInt(storedLockout, 10) - Date.now()) / 1000);
+        if (remainingSec > 0) {
+          startLockout(remainingSec);
+        } else {
+          sessionStorage.removeItem('trustedCares_lockoutEnd');
+        }
+      }
+    }
+    checkExistingLockout();
+
+    // -------------------------------------------------------------
+    // Form Submission & Authentication Verification
+    // -------------------------------------------------------------
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (state.isLockedOut) {
+        showToast("Access is currently locked. Please wait for timer to expire.", "warning");
+        return;
+      }
+
+      const nameVal = usernameInput.value.trim();
+      const passVal = passwordInput.value;
+
+      // 1. Validate User Name
+      const nameValidation = validateNameInput(nameVal);
+      if (!nameValidation.valid) {
+        usernameErrorText.textContent = nameValidation.message;
+        usernameError.classList.remove('hidden');
+        usernameWrapper.classList.add('border-rose-400', 'shake-error');
+        setTimeout(() => usernameWrapper.classList.remove('shake-error'), 400);
+        usernameInput.focus();
+        return;
+      } else {
+        usernameError.classList.add('hidden');
+        usernameWrapper.classList.remove('border-rose-400');
+      }
+
+      // 2. Validate Password Presence
+      if (!passVal) {
+        passwordErrorText.textContent = "Please enter your password.";
+        passwordError.classList.remove('hidden');
+        passwordWrapper.classList.add('border-rose-400', 'shake-error');
+        setTimeout(() => passwordWrapper.classList.remove('shake-error'), 400);
+        passwordInput.focus();
+        return;
+      } else {
+        passwordError.classList.add('hidden');
+        passwordWrapper.classList.remove('border-rose-400');
+      }
+
+      // Simulate Authentication API Call
+      signInBtn.disabled = true;
+      signInBtnText.textContent = "Authenticating...";
+      signInSpinner.classList.remove('hidden');
+
+      setTimeout(() => {
+        signInBtn.disabled = false;
+        signInBtnText.textContent = "Sign in";
+        signInSpinner.classList.add('hidden');
+
+        // Check credentials against demo state (case-insensitive for username)
+        const isUserMatch = (nameVal.toLowerCase() === state.validUser.name.toLowerCase());
+        const isPassMatch = (passVal === state.validUser.password);
+
+        if (isUserMatch && isPassMatch) {
+          // Successful login
+          state.failedAttempts = 0;
+          showToast(`Welcome back, ${state.validUser.name}! Logging you into TrusTedCares portal...`, "success");
+        } else {
+          // Failed attempt
+          state.failedAttempts++;
+          const remaining = state.maxAttempts - state.failedAttempts;
+
+          if (state.failedAttempts >= state.maxAttempts) {
+            showToast("Maximum failed attempts reached. System locked for 30 seconds.", "error");
+            startLockout(state.lockoutDurationSeconds);
+          } else {
+            passwordErrorText.textContent = `Invalid credentials. ${remaining} attempt${remaining === 1 ? '' : 's'} remaining before security lockout.`;
+            passwordError.classList.remove('hidden');
+            passwordWrapper.classList.add('border-rose-400', 'shake-error');
+            setTimeout(() => passwordWrapper.classList.remove('shake-error'), 400);
+            showToast(`Incorrect username or password. (${remaining} attempts left)`, "warning");
+          }
+        }
+      }, 700);
+    });
+
+    // -------------------------------------------------------------
+    // Quick autofill button for demonstration
+    // -------------------------------------------------------------
+    quickFillBtn.addEventListener('click', () => {
+      usernameInput.value = state.validUser.name;
+      passwordInput.value = state.validUser.password;
+      usernameError.classList.add('hidden');
+      passwordError.classList.add('hidden');
+      usernameWrapper.classList.remove('border-rose-400');
+      passwordWrapper.classList.remove('border-rose-400');
+      showToast("Demo credentials filled!", "info");
+    });
+
+    // -------------------------------------------------------------
+    // Requirement 4: Google Single Sign-On (SSO) Ready Setup
+    // -------------------------------------------------------------
+    googleSignInBtn.addEventListener('click', () => {
+      // Check if Google GIS is available and a client ID is provided
+      if (window.google && GOOGLE_CLIENT_ID !== "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com") {
+        try {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleCredentialResponse
+          });
+          google.accounts.id.prompt(); // Displays the Google One-tap or popup
+        } catch (err) {
+          console.error("Google SSO Init error:", err);
+          showToast("Unable to reach Google SSO service.", "error");
+        }
+      } else {
+        // Fallback simulated Google authentication for preview
+        showToast("Google SSO simulated: Authenticated with hospital Google Workspace account.", "success");
+        usernameInput.value = "Dr Sarah Jenkins";
+        passwordInput.value = state.validUser.password;
+      }
+    });
+
+    function handleGoogleCredentialResponse(response) {
+      // response.credential contains the verified JWT ID token from Google
+      console.log("Google JWT Credential Received:", response.credential);
+      showToast("Google SSO authentication successful!", "success");
+    }
+
+    // -------------------------------------------------------------
+    // Requirement 5: Forgot & Reset Password Flow
+    // -------------------------------------------------------------
+    openForgotModalBtn.addEventListener('click', () => {
+      forgotStep1.classList.remove('hidden');
+      forgotStep2.classList.add('hidden');
+      forgotStep3.classList.add('hidden');
+      resetEmailInput.value = "";
+      resetEmailError.classList.add('hidden');
+      forgotModal.classList.remove('hidden');
+    });
+
+    closeForgotModalBtn.addEventListener('click', () => {
+      forgotModal.classList.add('hidden');
+    });
+
+    // Close on clicking backdrop
+    forgotModal.addEventListener('click', (e) => {
+      if (e.target === forgotModal) {
+        forgotModal.classList.add('hidden');
+      }
+    });
+
+    // Step 1: Send Reset Code
+    sendCodeBtn.addEventListener('click', () => {
+      const email = resetEmailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email || !emailRegex.test(email)) {
+        resetEmailError.classList.remove('hidden');
+        resetEmailInput.focus();
+        return;
+      }
+
+      resetEmailError.classList.add('hidden');
+      sendCodeBtn.disabled = true;
+      sendCodeBtn.textContent = "Sending code...";
+
+      setTimeout(() => {
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "Send Verification Code";
+        forgotStep1.classList.add('hidden');
+        forgotStep2.classList.remove('hidden');
+        showToast(`Verification code sent to ${email} (Demo code: 123456)`, "info");
+      }, 700);
+    });
+
+    // Step 2: Validate New Password & Save
+    saveNewPasswordBtn.addEventListener('click', () => {
+      const code = resetCodeInput.value.trim();
+      const newPass = newPasswordInput.value;
+      const confirmPass = confirmPasswordInput.value;
+
+      if (code !== "123456") {
+        showToast("Invalid verification code. Enter demo code: 123456", "error");
+        resetCodeInput.focus();
+        return;
+      }
+
+      // Password rules: can contain letters, numbers, and special characters, min 6
+      if (!newPass || newPass.length < 6) {
+        newPasswordError.classList.remove('hidden');
+        newPasswordInput.focus();
+        return;
+      } else {
+        newPasswordError.classList.add('hidden');
+      }
+
+      if (newPass !== confirmPass) {
+        confirmPasswordError.classList.remove('hidden');
+        confirmPasswordInput.focus();
+        return;
+      } else {
+        confirmPasswordError.classList.add('hidden');
+      }
+
+      // Update state password
+      state.validUser.password = newPass;
+      passwordInput.value = newPass;
+
+      forgotStep2.classList.add('hidden');
+      forgotStep3.classList.remove('hidden');
+      showToast("Password updated successfully!", "success");
+    });
+
+    // Step 3: Finish & Return
+    backToLoginBtn.addEventListener('click', () => {
+      forgotModal.classList.add('hidden');
+      passwordInput.focus();
+    });
+
+    // Sign up button action
+    document.getElementById('signUpLink').addEventListener('click', () => {
+      showToast("Staff onboarding is managed by TrusTedCares HR & IT department.", "info");
+    });
+  </script>
+</body>
+</html>

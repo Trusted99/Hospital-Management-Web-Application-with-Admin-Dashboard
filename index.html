@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trusted Cares | Modern Hospital Management System</title>
+
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Single Unified Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="hospital-theme">
+
+  <!-- Fixed Hospital Photo Background (image3.jpg) -->
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <!-- Overall Page Framework -->
+  <div class="app-layout">
+
+    <!-- ==================== 1. SPLIT HEADER NAVIGATION ==================== -->
+    <!-- ==================== SPLIT FLOATING HEADER (INDEX) ==================== -->
+    <header class="split-header">
+      <!-- Left Pill: Brand Capsule -->
+      <a href="index.html" class="glass-pill-capsule brand-capsule">
+        <div class="brand-logo-frame small">
+          <img src="logo.jpg" alt="Hospital Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-name">Trusted<span>Cares</span></div>
+      </a>
+
+      <!-- Right Pill: Navigation Capsule -->
+      <nav class="glass-pill-capsule nav-capsule" aria-label="Main Navigation">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="AboutUs.html" class="nav-link">About Us</a>
+        <a href="Departments.html" class="nav-link">Departments</a>
+        <a href="AboutUs.html#contact" class="nav-link">Contact</a>
+      </nav>
+    </header>
+
+    <!-- ==================== 2. MAIN HERO & STATUS GRID ==================== -->
+    <main class="main-content">
+      <div class="dashboard-grid">
+
+        <!-- Left: Ultra-thin Glass Hero Panel -->
+        <section class="glass-panel hero-card">
+          <div class="card-glow-reflection"></div>
+
+          <div class="status-row">
+            <span class="badge-accent">
+              <span class="badge-dot"></span>
+              COMPASSIONATE CARE. CLINICAL EXCELLENCE.
+            </span>
+            <div class="status-indicator">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Outpatient Admitting</span>
+            </div>
+          </div>
+
+          <h1 class="hero-title">Your Health.<br>Our Priority.</h1>
+
+          <p class="hero-description">
+            Discover quality healthcare delivered by experienced medical professionals across a wide range of
+            specialties. Explore our medical departments, find the right doctor, and book appointments with ease. From
+            routine consultations to diagnostic services and emergency care, we are here to support your health at every
+            stage.
+          </p>
+
+          <div class="hero-cta-group">
+            <button class="btn-primary-action" onclick="window.location.href='Departments.html'">
+              <span>Book an Appointment</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button class="btn-secondary-action" onclick="window.location.href='Departments.html'">
+              <span>Explore Our Departments</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div class="supporting-text">
+            <span>Expert Care</span>
+            <span class="dot-sep">&bull;</span>
+            <span>Modern Diagnostics</span>
+            <span class="dot-sep">&bull;</span>
+            <span>Patient-Centred Services</span>
+          </div>
+        </section>
+
+        <!-- Right: Glass Widgets Stack -->
+        <aside class="glass-column">
+
+          <!-- Widget 1: Wait Time -->
+          <article class="glass-panel metric-widget">
+            <div class="widget-top">
+              <span class="widget-label">Emergency Wait Time</span>
+              <div class="icon-chip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                  <path d="M12 7v5l4 2" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="metric-body">
+              <div class="metric-number">
+                12 <span class="metric-unit">mins</span>
+              </div>
+              <span class="trend-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
+                Normal Flow
+              </span>
+            </div>
+          </article>
+
+          <!-- Widget 2 & 3: Dual Stats (13 Departments & Specialists) -->
+          <div class="dual-widgets-row">
+            <article class="glass-panel mini-widget">
+              <div class="mini-widget-header">
+                <div class="mini-icon blue-glow">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                  </svg>
+                </div>
+                <span class="mini-title">Departments</span>
+              </div>
+              <div class="mini-stat">13 <span class="sub-unit">Specialized</span></div>
+              <a href="Departments.html" class="mini-action">
+                View all units
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </a>
+            </article>
+
+            <article class="glass-panel mini-widget">
+              <div class="mini-widget-header">
+                <div class="mini-icon amber-glow">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </div>
+                <span class="mini-title">Specialists</span>
+              </div>
+              <div class="mini-stat">28 <span class="sub-unit">Active</span></div>
+              <a href="Departments.html" class="mini-action">
+                Duty roster
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </a>
+            </article>
+          </div>
+
+          <!-- Widget 4: Fast-Track Services -->
+          <article class="glass-panel list-widget">
+            <div class="list-widget-head">
+              <span class="widget-label">Fast-Track Units</span>
+              <a href="Departments.html" class="view-all-link">Directory &rarr;</a>
+            </div>
+
+            <div class="department-items">
+              <div class="dept-card-snippet">
+                <div class="dept-info">
+                  <div class="dept-icon red">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                    </svg>
+                  </div>
+                  <span class="dept-name">Cardiology &amp; Vascular</span>
+                </div>
+                <span class="status-pill open">Open</span>
+              </div>
+
+              <div class="dept-card-snippet">
+                <div class="dept-info">
+                  <div class="dept-icon purple">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 3a9 9 0 0 0 0 18v-9h9" />
+                    </svg>
+                  </div>
+                  <span class="dept-name">Neurology &amp; Trauma</span>
+                </div>
+                <span class="status-pill ready">On Standby</span>
+              </div>
+            </div>
+          </article>
+
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- ==================== 3. COMPREHENSIVE GLASS FOOTER ==================== -->
+    <footer class="glass-footer">
+      <div class="footer-grid">
+
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <div class="brand-logo-frame small">
+              <img src="logo.jpg" alt="Trusted Cares Logo" class="brand-logo-img">
+            </div>
+            <span class="brand-name">Trusted<span> Cares</span></span>
+          </div>
+          <p class="footer-tagline">
+            Excellence in clinical care, rapid emergency response, and community health management.
+          </p>
+          <div class="accreditation-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>MOH Accredited &bull; ISO 9001:2026</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-menu">
+            <li><a href="index.html">Homepage</a></li>
+            <li><a href="AboutUs.html">About Our Facility</a></li>
+            <li><a href="Departments.html">Clinical Services</a></li>
+            <li><a href="Departments.html">Specialist Departments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Hospital Location</h4>
+          <div class="footer-info-item">
+            <div class="info-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <p>P.O. Box 24, Anloga</p>
+              <p>Volta Region, Ghana</p>
+              <span class="sub-meta">Main Entrance: Coastal Road</span>
+            </div>
+          </div>
+
+          <div class="footer-info-item">
+            <div class="info-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <p>OPD Hours: 8:00 AM – 8:00 PM</p>
+              <p class="highlight-text">Triage &amp; Trauma: 24/7 Everyday</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-col emergency-col">
+          <h4 class="footer-title">Emergency Response</h4>
+          <div class="emergency-call-box">
+            <span class="call-lead">For Urgent Medical Assistance:</span>
+            <a href="tel:+233362000000" class="emergency-phone-link">
+              <div class="phone-pulse-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </div>
+              <div class="phone-details">
+                <span class="phone-label">Direct Trauma Line</span>
+                <span class="phone-number">+233 (0) 362 000 000</span>
+              </div>
+            </a>
+            <div class="desk-line">
+              <span>General Desk:</span>
+              <a href="tel:+233240000000">+233 (0) 240 000 000</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p class="copyright">&copy; 2026 Trusted Cares Hospital Center. All rights reserved.</p>
+        <div class="bottom-links">
+          <a href="#privacy">Privacy Policy</a>
+          <span class="sep">&bull;</span>
+          <a href="#terms">Patient Rights</a>
+          <span class="sep">&bull;</span>
+          <a href="#security">HIPAA &amp; Security</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Doctors Data (must load before script.js) -->
+  <script src="doctorsData.js"></script>
+  <!-- Unified Interactive Logic -->
+  <script src="script.js"></script>
+</body>
+
+</html>

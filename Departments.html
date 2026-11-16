@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical Departments | Trusted Cares Hospital</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Single Unified Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="hospital-theme">
+
+  <!-- Fixed Hospital Photo Background -->
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <!-- Overall Page Framework -->
+  <div class="app-layout">
+
+    <!-- ==================== 1. SPLIT HEADER NAVIGATION ==================== -->
+    <header class="split-header">
+      <!-- Left Pill: Brand Capsule -->
+      <a href="index.html" class="glass-pill-capsule brand-capsule">
+        <div class="brand-logo-frame small">
+          <img src="logo.jpg" alt="Hospital Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-name">Trusted<span>Cares</span></div>
+      </a>
+
+      <!-- Right Pill: Navigation Capsule -->
+      <nav class="glass-pill-capsule nav-capsule" aria-label="Main Navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="AboutUs.html" class="nav-link">About Us</a>
+        <a href="Departments.html" class="nav-link active">Departments</a>
+        <a href="AboutUs.html#contact" class="nav-link">Contact</a>
+      </nav>
+    </header>
+
+    <!-- ==================== 2. MAIN DEPARTMENTS SECTION ==================== -->
+    <main class="main-content departments-main">
+
+      <!-- Page Hero Header: 2-Column Split with Medical Image -->
+      <section class="glass-panel dept-page-intro">
+        <div class="card-glow-reflection"></div>
+        <div class="dept-intro-layout">
+
+          <!-- Left Content -->
+          <div class="dept-intro-text">
+            <div class="status-row">
+              <span class="badge-accent">
+                <span class="badge-dot"></span>
+                13 Specialized Medical Wings
+              </span>
+              <span class="status-indicator">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                Specialist Rosters Active
+              </span>
+            </div>
+
+            <h1 class="page-title">Specialist Clinical Departments</h1>
+            <p class="page-subtitle">
+              Explore our multidisciplinary faculties, diagnostic laboratories, and surgical suites. Select any
+              department below to view resident consultants, service scopes, and schedule direct consultations.
+            </p>
+
+            <div class="intro-stats-strip">
+              <div class="stat-bubble">
+                <span class="stat-bubble-val">13</span>
+                <span class="stat-bubble-lbl">Departments</span>
+              </div>
+              <div class="stat-bubble-divider"></div>
+              <div class="stat-bubble">
+                <span class="stat-bubble-val">29</span>
+                <span class="stat-bubble-lbl">Resident Doctors</span>
+              </div>
+              <div class="stat-bubble-divider"></div>
+              <div class="stat-bubble">
+                <span class="stat-bubble-val">24/7</span>
+                <span class="stat-bubble-lbl">Emergency Triage</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Showcase Image Panel -->
+          <div class="dept-intro-media">
+            <div class="media-frame">
+              <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1000&q=80"
+                alt="Medical clinical specialists consulting" class="dept-showcase-img">
+              <div class="media-overlay-gradient"></div>
+
+              <!-- Floating Glass Micro-Badge -->
+              <div class="floating-media-badge">
+                <div class="badge-icon-core">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <polyline points="16 11 18 13 22 9" />
+                  </svg>
+                </div>
+                <div>
+                  <strong>Verified Practitioners</strong>
+                  <span>Board-Certified Consultants</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Department Directory Grid -->
+      <section class="departments-grid">
+
+        <!-- 1. Accident & Emergency -->
+        <article class="glass-panel dept-card" data-dept-id="emergency">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon red">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </div>
+            <span class="status-pill open">24/7 Resuscitation</span>
+          </div>
+          <h3 class="dept-title">Accident &amp; Emergency (A&amp;E)</h3>
+          <p class="dept-desc">
+            Immediate emergency triage, acute trauma care, and intensive resuscitation for life-threatening conditions.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Trauma Resus</span>
+            <span class="sub-unit-tag">Acute Medical Triage</span>
+            <span class="sub-unit-tag">Poison Control</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('emergency')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 2. Internal Medicine -->
+        <article class="glass-panel dept-card" data-dept-id="internal-medicine">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v8M8 12h8" />
+              </svg>
+            </div>
+            <span class="status-pill ready">4 Sub-Specialties</span>
+          </div>
+          <h3 class="dept-title">Internal Medicine</h3>
+          <p class="dept-desc">
+            Comprehensive diagnosis, systemic disease prevention, and non-surgical management of complex multi-organ
+            adult illnesses.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Cardiology</span>
+            <span class="sub-unit-tag">Nephrology</span>
+            <span class="sub-unit-tag">Neurology</span>
+            <span class="sub-unit-tag">Gastroenterology</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('internal-medicine')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 3. General Surgery -->
+        <article class="glass-panel dept-card" data-dept-id="general-surgery">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+              </svg>
+            </div>
+            <span class="status-pill ready">4 Operating Theatres</span>
+          </div>
+          <h3 class="dept-title">General Surgery</h3>
+          <p class="dept-desc">
+            Advanced elective and emergency operative intervention encompassing minimally invasive laparoscopy and major
+            trauma surgery.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Neurosurgery</span>
+            <span class="sub-unit-tag">Urology</span>
+            <span class="sub-unit-tag">Orthopaedics</span>
+            <span class="sub-unit-tag">Paediatric Surgery</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('general-surgery')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 4. Paediatrics -->
+        <article class="glass-panel dept-card" data-dept-id="paediatrics">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon purple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33-1.82l-.06-.18a2 2 0 0 0-2.5-1.12l-1.4.52a12.6 12.6 0 0 0-7.54 0l-1.4-.52a2 2 0 0 0-2.5 1.12l-.06.18A1.65 1.65 0 0 0 5 15" />
+              </svg>
+            </div>
+            <span class="status-pill open">NICU &amp; PICU</span>
+          </div>
+          <h3 class="dept-title">Paediatrics &amp; Child Health</h3>
+          <p class="dept-desc">
+            Dedicated inpatient and outpatient clinical wellness, neonatal intensive therapy, and developmental
+            paediatrics from newborn to adolescence.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Neonatal ICU</span>
+            <span class="sub-unit-tag">Immunization Clinic</span>
+            <span class="sub-unit-tag">Child Nutrition</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('paediatrics')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 5. Obstetrics & Gynaecology -->
+        <article class="glass-panel dept-card" data-dept-id="obgyn">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon rose">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+            </div>
+            <span class="status-pill open">Maternity &amp; Labour</span>
+          </div>
+          <h3 class="dept-title">Obstetrics &amp; Gynaecology</h3>
+          <p class="dept-desc">
+            Holistic maternal health, antenatal monitoring, safe delivery suites, fertility solutions, and surgical
+            gynaecological treatments.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Antenatal / Postnatal</span>
+            <span class="sub-unit-tag">Labour &amp; Delivery</span>
+            <span class="sub-unit-tag">Fertility Consultation</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('obgyn')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 6. Family Medicine -->
+        <article class="glass-panel dept-card" data-dept-id="family-medicine">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon emerald">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <span class="status-pill open">OPD Admitting</span>
+          </div>
+          <h3 class="dept-title">Family Medicine &amp; Primary Care</h3>
+          <p class="dept-desc">
+            First-line health evaluation, chronic illness maintenance (hypertension, diabetes), preventative screenings,
+            and whole-family healthcare.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Routine Medical Exams</span>
+            <span class="sub-unit-tag">Chronic Disease Clinic</span>
+            <span class="sub-unit-tag">Elderly Care</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('family-medicine')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 7. Psychiatry -->
+        <article class="glass-panel dept-card" data-dept-id="psychiatry">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon teal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z" />
+                <line x1="10" y1="22" x2="14" y2="22" />
+              </svg>
+            </div>
+            <span class="status-pill ready">Confidential Consults</span>
+          </div>
+          <h3 class="dept-title">Psychiatry &amp; Mental Health</h3>
+          <p class="dept-desc">
+            Compassionate behavioral therapies, psychiatric evaluation, addiction rehabilitation, and cognitive health
+            management.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Clinical Psychology</span>
+            <span class="sub-unit-tag">Addiction Recovery</span>
+            <span class="sub-unit-tag">Stress &amp; Mood Disorders</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('psychiatry')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 8. Ophthalmology -->
+        <article class="glass-panel dept-card" data-dept-id="ophthalmology">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon sky">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <span class="status-pill ready">Laser &amp; Micro-surgery</span>
+          </div>
+          <h3 class="dept-title">Ophthalmology (Eye Clinic)</h3>
+          <p class="dept-desc">
+            Comprehensive vision tests, cataract extraction, glaucoma intervention, laser retinal therapies, and
+            specialized optical lenses.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Cataract Surgery</span>
+            <span class="sub-unit-tag">Glaucoma Clinic</span>
+            <span class="sub-unit-tag">Optometry &amp; Refraction</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('ophthalmology')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 9. ENT -->
+        <article class="glass-panel dept-card" data-dept-id="ent">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 18h12M6 14h12M6 10h12" />
+                <path d="M12 2a4 4 0 0 1 4 4v12a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z" />
+              </svg>
+            </div>
+            <span class="status-pill ready">Audiology Lab</span>
+          </div>
+          <h3 class="dept-title">Ear, Nose &amp; Throat (ENT)</h3>
+          <p class="dept-desc">
+            Diagnostic endoscopy, hearing rehabilitation, sinus surgery, and vocal cord restoration by experienced head
+            and neck surgeons.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Audiology Testing</span>
+            <span class="sub-unit-tag">Sinus &amp; Allergy Suite</span>
+            <span class="sub-unit-tag">Voice &amp; Swallowing</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('ent')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 10. Dental & Oral Health -->
+        <article class="glass-panel dept-card" data-dept-id="dental">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12 2C8.5 2 6 4.5 6 8c0 3 1.5 6 3 9.5 1 2.5 1.5 4.5 3 4.5s2-2 3-4.5c1.5-3.5 3-6.5 3-9.5 0-3.5-2.5-6-6-6z" />
+              </svg>
+            </div>
+            <span class="status-pill ready">Orthodontics &amp; Surgery</span>
+          </div>
+          <h3 class="dept-title">Dental &amp; Oral Health</h3>
+          <p class="dept-desc">
+            Advanced oral maxillofacial surgery, aesthetic root restoration, orthodontics braces, and preventative
+            periodontic oral hygiene.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Cosmetic Dentistry</span>
+            <span class="sub-unit-tag">Maxillofacial Surgery</span>
+            <span class="sub-unit-tag">Pediatric Dental</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('dental')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 11. Radiology & Imaging -->
+        <article class="glass-panel dept-card" data-dept-id="radiology">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon emerald">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <span class="status-pill open">Digital Scans</span>
+          </div>
+          <h3 class="dept-title">Radiology &amp; Imaging</h3>
+          <p class="dept-desc">
+            Ultra-low radiation multi-slice CT, high-resonance MRI, Doppler ultrasound, and interventional fluoroscopic
+            imaging.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">128-Slice CT Scan</span>
+            <span class="sub-unit-tag">High-Field 1.5T MRI</span>
+            <span class="sub-unit-tag">4D Ultrasound</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('radiology')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 12. Laboratory Services -->
+        <article class="glass-panel dept-card" data-dept-id="laboratory">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon purple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 2v7.31L4.36 19.46A2 2 0 0 0 6.07 22h11.86a2 2 0 0 0 1.71-2.54L14 9.31V2" />
+                <line x1="8.5" y1="2" x2="15.5" y2="2" />
+              </svg>
+            </div>
+            <span class="status-pill open">Automated 24/7</span>
+          </div>
+          <h3 class="dept-title">Laboratory &amp; Pathology</h3>
+          <p class="dept-desc">
+            ISO-certified hematology, clinical biochemistry, automated microbiology culture, histology, and blood
+            transfusion banking.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Molecular PCR</span>
+            <span class="sub-unit-tag">Blood Bank &amp; Crossmatch</span>
+            <span class="sub-unit-tag">Microbiology</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('laboratory')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+        <!-- 13. Oncology & Specialty Care -->
+        <article class="glass-panel dept-card" data-dept-id="oncology">
+          <div class="dept-card-top">
+            <div class="dept-badge-icon rose">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+            </div>
+            <span class="status-pill ready">Day Chemotherapy</span>
+          </div>
+          <h3 class="dept-title">Oncology &amp; Infusion Centre</h3>
+          <p class="dept-desc">
+            Tumour board conferences, outpatient chemotherapy infusion, targeted immunotherapy, and holistic palliative
+            supportive care.
+          </p>
+          <div class="dept-sub-units">
+            <span class="sub-unit-tag">Medical Oncology</span>
+            <span class="sub-unit-tag">Infusion Suites</span>
+            <span class="sub-unit-tag">Palliative Support</span>
+          </div>
+          <button class="btn-dept-action" onclick="openDeptModal('oncology')">
+            <span>View Doctors &amp; Details</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </article>
+
+      </section>
+
+    </main>
+
+    <!-- ==================== 3. MODAL: DEPARTMENT DOCTOR ROSTER ==================== -->
+    <div id="deptRosterModal" class="glass-modal-backdrop" aria-hidden="true">
+      <div class="glass-panel modal-card">
+
+        <div class="modal-header">
+          <div class="modal-header-info">
+            <span id="modalDeptCategory" class="badge-accent">Clinical Wing</span>
+            <h2 id="modalDeptName" class="modal-title">Department Details</h2>
+          </div>
+          <button class="btn-modal-close" onclick="closeDeptModal()" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <p id="modalDeptDesc" class="modal-dept-desc"></p>
+
+        <div class="modal-section-title">Specialist Units &amp; Clinics</div>
+        <div id="modalSubUnitsList" class="modal-tags-row"></div>
+
+        <div class="modal-section-title">Resident Specialists &amp; Consultants</div>
+        <div id="modalDoctorsList" class="doctors-grid">
+          <!-- Populated dynamically with full profile actions via script.js -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== 4. MODAL: EXPANDED DOCTOR PROFILE ==================== -->
+    <div id="doctorProfileModal" class="glass-modal-backdrop" aria-hidden="true">
+      <div class="glass-panel modal-card doctor-profile-modal-card">
+
+        <div class="modal-header">
+          <div class="modal-header-info">
+            <span class="badge-accent" id="profileBadgeDept">Specialist Profile</span>
+            <h2 id="profileDocName" class="modal-title">Doctor Details</h2>
+          </div>
+          <button class="btn-modal-close" onclick="closeDoctorProfileModal()" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="doctor-full-profile-layout">
+          <div class="profile-avatar-column">
+            <div class="profile-large-img-frame">
+              <img id="profileDocImg" src="" alt="Doctor Profile" class="profile-large-img" />
+            </div>
+            <div class="profile-experience-chip">
+              <strong id="profileDocExp">--</strong>
+              <span>Clinical Experience</span>
+            </div>
+            <div class="profile-schedule-chip">
+              <span class="sched-label">&#128197; Roster Schedule:</span>
+              <strong id="profileDocSchedule">--</strong>
+            </div>
+          </div>
+
+          <div class="profile-details-column">
+            <div class="profile-sub-title" id="profileDocTitle">--</div>
+            <div class="profile-sub-dept" id="profileDeptLine">--</div>
+
+            <div class="profile-section-title">Biography &amp; Clinical Background</div>
+            <p id="profileDocBio" class="profile-bio-text"></p>
+
+            <div class="profile-section-title">Clinical Interests &amp; Focus</div>
+            <div id="profileInterestsList" class="modal-tags-row"></div>
+
+            <div class="profile-section-title">Credentials &amp; Qualifications</div>
+            <div id="profileQualsList" class="modal-tags-row quals-row"></div>
+
+            <div class="profile-meta-row">
+              <span class="profile-meta-item">
+                <strong>Languages:</strong> <span id="profileDocLanguages">--</span>
+              </span>
+            </div>
+
+            <div class="profile-action-bar">
+              <button type="button" class="btn-primary-action profile-book-btn" id="profileDirectBookBtn">
+                <span>Book Consultation with Specialist</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== 5. MODAL: DIRECT APPOINTMENT BOOKING ==================== -->
+    <div id="appointmentModal" class="glass-modal-backdrop" aria-hidden="true">
+      <div class="glass-panel modal-card booking-card">
+
+        <div class="modal-header">
+          <div class="modal-header-info">
+            <span class="badge-accent">Direct Practitioner Booking</span>
+            <h2 class="modal-title">Schedule Clinical Consultation</h2>
+          </div>
+          <button class="btn-modal-close" onclick="closeAppointmentModal()" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form id="appointmentForm" class="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+
+          <div class="locked-context-banner">
+            <div class="context-item">
+              <span class="label">Assigned Department</span>
+              <strong id="lockDeptName">--</strong>
+            </div>
+            <div class="context-item">
+              <span class="label">Selected Specialist</span>
+              <strong id="lockDoctorName">--</strong>
+            </div>
+          </div>
+
+          <input type="hidden" id="hiddenDeptInput" name="department">
+          <input type="hidden" id="hiddenDoctorInput" name="doctor">
+          <input type="hidden" id="hiddenDoctorIdInput" name="doctorId">
+
+          <div class="form-row dual">
+            <div class="form-group">
+              <label for="patientName">Full Name *</label>
+              <input type="text" id="patientName" required placeholder="e.g. John Doe">
+            </div>
+            <div class="form-group">
+              <label for="patientPhone">Contact Phone *</label>
+              <input type="tel" id="patientPhone" required placeholder="+233 (0) 240 000 000">
+            </div>
+          </div>
+
+          <div class="form-row dual">
+            <div class="form-group">
+              <label for="consultDate">Preferred Date *</label>
+              <input type="date" id="consultDate" required>
+            </div>
+            <div class="form-group">
+              <label for="consultTime">Preferred Session *</label>
+              <select id="consultTime" required>
+                <option value="Morning">Morning Clinic (8:30 AM - 12:30 PM)</option>
+                <option value="Afternoon">Afternoon Clinic (1:30 PM - 5:00 PM)</option>
+                <option value="Evening">Evening OPD (5:30 PM - 8:00 PM)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="symptomsNote">Brief Reason for Visit / Medical Notes</label>
+            <textarea id="symptomsNote" rows="3"
+              placeholder="Describe symptoms, previous hospital card number (if returning), or referral details..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary-action submit-btn">
+            <span>Confirm &amp; Transmit to Department Desk</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ==================== 6. COMPREHENSIVE GLASS FOOTER ==================== -->
+    <footer class="glass-footer">
+      <div class="footer-grid">
+
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <div class="brand-logo-frame small">
+              <img src="logo.jpg" alt="Trusted Cares Logo" class="brand-logo-img">
+            </div>
+            <span class="brand-name">Trusted<span> Cares</span></span>
+          </div>
+          <p class="footer-tagline">
+            Excellence in clinical care, rapid emergency response, and community health management.
+          </p>
+          <div class="accreditation-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>MOH Accredited &bull; ISO 9001:2026</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-menu">
+            <li><a href="index.html">Homepage</a></li>
+            <li><a href="AboutUs.html">About Our Facility</a></li>
+            <li><a href="Departments.html">Clinical Services</a></li>
+            <li><a href="Departments.html">Specialist Departments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Hospital Location</h4>
+          <div class="footer-info-item">
+            <div class="info-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <p>P.O. Box 24, Anloga</p>
+              <p>Volta Region, Ghana</p>
+              <span class="sub-meta">Main Entrance: Coastal Road</span>
+            </div>
+          </div>
+
+          <div class="footer-info-item">
+            <div class="info-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <p>OPD Hours: 8:00 AM – 8:00 PM</p>
+              <p class="highlight-text">Triage &amp; Trauma: 24/7 Everyday</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-col emergency-col">
+          <h4 class="footer-title">Emergency Response</h4>
+          <div class="emergency-call-box">
+            <span class="call-lead">For Urgent Medical Assistance:</span>
+            <a href="tel:+233362000000" class="emergency-phone-link">
+              <div class="phone-pulse-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </div>
+              <div class="phone-details">
+                <span class="phone-label">Direct Trauma Line</span>
+                <span class="phone-number">+233 (0) 362 000 000</span>
+              </div>
+            </a>
+            <div class="desk-line">
+              <span>General Desk:</span>
+              <a href="tel:+233240000000">+233 (0) 240 000 000</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p class="copyright">&copy; 2026 Trusted Cares Hospital Center. All rights reserved.</p>
+        <div class="bottom-links">
+          <a href="index.html#privacy">Privacy Policy</a>
+          <span class="sep">&bull;</span>
+          <a href="index.html#terms">Patient Rights</a>
+          <span class="sep">&bull;</span>
+          <a href="index.html#security">HIPAA &amp; Security</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Doctors Data (must load before script.js) -->
+  <script src="doctorsData.js"></script>
+  <!-- Unified Interactive Logic -->
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Management - Admin Dashboard</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Modular Stylesheets (Admin panel) -->
+  <link rel="stylesheet" href="Admin/css/admin/theme.css">
+  <link rel="stylesheet" href="Admin/css/admin/layout.css">
+  <link rel="stylesheet" href="Admin/css/admin/dashboard.css">
+</head>
+
+<body>
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+  <!-- =========================================================
+       SIDEBAR
+       ========================================================= -->
+  <aside class="sidebar" id="mainSidebar">
+    <!-- Mobile close button -->
+    <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close sidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+    <div class="doctor-profile">
+      <div class="profile-avatar-wrap">
+        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80"
+          alt="Dr. Marttin Deo" />
+      </div>
+      <h3 class="profile-name">Dr. Marttin Deo</h3>
+      <p class="profile-credentials">MBBS, FCPS - MD (Medicine), MCPS</p>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active">
+        <a href="admin_dashboard.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#appointmentsQueue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          Appointments
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="index.html" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          Public Intake
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#payment">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Payment
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Profile
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+          Settings
+        </a>
+      </li>
+      <li class="nav-item nav-logout">
+        <a href="index.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- =========================================================
+       MAIN DASHBOARD
+       ========================================================= -->
+  <main class="main-wrapper">
+    <!-- Topbar -->
+    <header class="topbar">
+      <!-- Hamburger button - visible on mobile only -->
+      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Open navigation menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+      <h1 class="page-title">Dashboard</h1>
+
+      <div class="topbar-actions">
+        <button class="action-icon-btn" aria-label="Messages">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </button>
+        <button class="action-icon-btn" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Search patients or ref..." id="globalSearchInput" />
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-grid">
+      <!-- 1. Row: Top Stat Cards -->
+      <section class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="stat-label">Total Patients</p>
+            <h2 class="stat-value" id="statTotalPatients">2,000+</h2>
+            <p class="stat-subtext">Till Today</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="18" y1="8" x2="23" y2="13"></line>
+              <line x1="23" y1="8" x2="18" y2="13"></line>
+            </svg>
+          </div>
+          <div>
+            <p class="stat-label">Today's Patients</p>
+            <h2 class="stat-value" id="statTodayPatients">068</h2>
+            <p class="stat-subtext" id="todayDateLabel">21 Dec 2026</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div>
+            <p class="stat-label">Today's Appointments</p>
+            <h2 class="stat-value" id="statTodayAppointments">085</h2>
+            <p class="stat-subtext" id="todayApptLabel">21 Dec 2026</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Row: Main Visuals & Active Focus -->
+      <section class="mid-row">
+        <!-- Donut Summary -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Patients Summary</h3>
+          </div>
+          <div class="donut-container">
+            <div class="donut-chart">
+              <div class="donut-hole"></div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-dot" style="background: var(--primary);"></span>
+              <span>Total Patients (50%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: var(--primary-soft);"></span>
+              <span>New Patients (28%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: var(--accent-amber);"></span>
+              <span>Old Patients (22%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Appointments Mini Queue -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Today's Appointments</h3>
+          </div>
+          <div class="appointment-mini-list" id="todayMiniList">
+            <div class="appointment-mini-item">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="M.J. Mical">
+                <div class="patient-name-diag">
+                  <h4>M.J. Mical</h4>
+                  <p>Health Checkup</p>
+                </div>
+              </div>
+              <span class="time-badge ongoing">On Going</span>
+            </div>
+
+            <div class="appointment-mini-item">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="Sanath Deo">
+                <div class="patient-name-diag">
+                  <h4>Sanath Deo</h4>
+                  <p>Health Checkup</p>
+                </div>
+              </div>
+              <span class="time-badge">12:30 PM</span>
+            </div>
+
+            <div class="appointment-mini-item">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="Loeara Phanj">
+                <div class="patient-name-diag">
+                  <h4>Loeara Phanj</h4>
+                  <p>Report Review</p>
+                </div>
+              </div>
+              <span class="time-badge">01:00 PM</span>
+            </div>
+
+            <div class="appointment-mini-item">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="Komola Haris">
+                <div class="patient-name-diag">
+                  <h4>Komola Haris</h4>
+                  <p>Common Cold</p>
+                </div>
+              </div>
+              <span class="time-badge">01:30 PM</span>
+            </div>
+          </div>
+          <a href="#appointmentsQueue" class="see-all-link">See All</a>
+        </div>
+
+        <!-- Next Patient Details (Focus Card) -->
+        <div class="card">
+          <div class="next-patient-header">
+            <div class="next-patient-main">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80"
+                class="avatar-lg" alt="Sanath Deo">
+              <div>
+                <h3 class="card-title">Sanath Deo</h3>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Health Checkup</p>
+              </div>
+            </div>
+            <div class="patient-id-badge">
+              Patient ID
+              <span>#0220092020</span>
+            </div>
+          </div>
+
+          <div class="vitals-grid">
+            <div class="vital-item">
+              <p>D.O.B</p>
+              <strong>15 Jan 1989</strong>
+            </div>
+            <div class="vital-item">
+              <p>Sex</p>
+              <strong>Male</strong>
+            </div>
+            <div class="vital-item">
+              <p>Weight</p>
+              <strong>59 Kg</strong>
+            </div>
+            <div class="vital-item">
+              <p>Last Appointment</p>
+              <strong>15 Dec 2026</strong>
+            </div>
+            <div class="vital-item">
+              <p>Height</p>
+              <strong>172 cm</strong>
+            </div>
+            <div class="vital-item">
+              <p>Reg. Date</p>
+              <strong>10 Dec 2026</strong>
+            </div>
+          </div>
+
+          <div class="history-tags">
+            <p>Patient History</p>
+            <div class="tags-container">
+              <span class="tag-badge tag-amber">Asthma</span>
+              <span class="tag-badge tag-blue">Hypertension</span>
+              <span class="tag-badge tag-red">Fever</span>
+            </div>
+          </div>
+
+          <div class="patient-actions-row">
+            <button class="btn-call" onclick="alert('Calling patient: (308) 555-0102')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
+              (308) 555-0102
+            </button>
+            <button class="btn-secondary" onclick="alert('Opening medical records...')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              Document
+            </button>
+            <button class="btn-secondary" onclick="alert('Opening chat messenger...')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              Chat
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Row: Feedback, Human-in-the-Loop Triage Queue, and Calendar -->
+      <section class="bottom-row">
+        <!-- Patient Review -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Patients Review</h3>
+          </div>
+          <div class="review-bars">
+            <div class="review-line">
+              <span style="width: 55px;">Excellent</span>
+              <div class="review-progress">
+                <div class="progress-fill" style="width: 85%; background: var(--primary);"></div>
+              </div>
+            </div>
+            <div class="review-line">
+              <span style="width: 55px;">Great</span>
+              <div class="review-progress">
+                <div class="progress-fill" style="width: 65%; background: var(--accent-green);"></div>
+              </div>
+            </div>
+            <div class="review-line">
+              <span style="width: 55px;">Good</span>
+              <div class="review-progress">
+                <div class="progress-fill" style="width: 40%; background: var(--accent-amber);"></div>
+              </div>
+            </div>
+            <div class="review-line">
+              <span style="width: 55px;">Average</span>
+              <div class="review-progress">
+                <div class="progress-fill" style="width: 25%; background: #38bdf8;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Appointment Requests (HUMAN-IN-THE-LOOP QUEUE) -->
+        <div class="card" id="appointmentsQueue">
+          <div class="card-header">
+            <h3 class="card-title">Appointment Request</h3>
+          </div>
+          <div class="request-list" id="hitlRequestList">
+            <!-- Queue Item 1 -->
+            <div class="request-item" id="req-row-101">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="Maria Sarafat">
+                <div class="patient-name-diag">
+                  <h4>Maria Sarafat</h4>
+                  <p><span class="urgency-dot urgency-high"></span>Cold, acute chest pressure</p>
+                </div>
+              </div>
+              <div class="hitl-actions">
+                <button class="action-btn-mini btn-review" title="Triage & Assign Request" onclick="openTriageModal({
+                  id: '101',
+                  reference: 'APT-2026-M821',
+                  patientName: 'Maria Sarafat',
+                  phone: '+233 24 555 0192',
+                  department: 'General Medicine',
+                  doctor: 'Dr. Marttin Deo',
+                  symptoms: 'Patient reports 4 days of cold with severe chest congestion and sporadic fever.',
+                  preferredTime: '22 Dec 2026 at 09:30 AM',
+                  urgency: 'HIGH'
+                })">🔍</button>
+                <button class="action-btn-mini btn-approve" title="Quick Approve"
+                  onclick="quickDecide('101', 'CONFIRMED')">✓</button>
+                <button class="action-btn-mini btn-decline" title="Decline"
+                  onclick="quickDecide('101', 'DECLINED')">✕</button>
+              </div>
+            </div>
+
+            <!-- Queue Item 2 -->
+            <div class="request-item" id="req-row-102">
+              <div class="patient-snippet">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80"
+                  class="avatar-sm" alt="Jhon Deo">
+                <div class="patient-name-diag">
+                  <h4>Jhon Deo</h4>
+                  <p><span class="urgency-dot urgency-medium"></span>Over sweating & dizziness</p>
+                </div>
+              </div>
+              <div class="hitl-actions">
+                <button class="action-btn-mini btn-review" title="Triage & Assign Request" onclick="openTriageModal({
+                  id: '102',
+                  reference: 'APT-2026-J404',
+                  patientName: 'Jhon Deo',
+                  phone: '+233 50 123 4567',
+                  department: 'Endocrinology',
+                  doctor: 'Dr. Sarah Koomson',
+                  symptoms: 'Excessive sweating during night and mild dizziness after meals.',
+                  preferredTime: '23 Dec 2026 at 11:00 AM',
+                  urgency: 'MEDIUM'
+                })">🔍</button>
+                <button class="action-btn-mini btn-approve" title="Quick Approve"
+                  onclick="quickDecide('102', 'CONFIRMED')">✓</button>
+                <button class="action-btn-mini btn-decline" title="Decline"
+                  onclick="quickDecide('102', 'DECLINED')">✕</button>
+              </div>
+            </div>
+          </div>
+          <a href="appointments.html?status=PENDING_REVIEW" class="see-all-link">See All Requests</a>
+        </div>
+
+        <!-- Mini Calendar -->
+        <div class="card">
+          <div class="calendar-header">
+            <span>Calendar</span>
+            <span>December 2026</span>
+          </div>
+          <table class="calendar-table">
+            <thead>
+              <tr>
+                <th>Su</th>
+                <th>Mo</th>
+                <th>Tu</th>
+                <th>We</th>
+                <th>Th</th>
+                <th>Fr</th>
+                <th>Sa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="muted-date">29</td>
+                <td class="muted-date">30</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+              </tr>
+              <tr>
+                <td>13</td>
+                <td>14</td>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+              </tr>
+              <tr>
+                <td>20</td>
+                <td class="active-date">21</td>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+              </tr>
+              <tr>
+                <td>27</td>
+                <td>28</td>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>
+                <td class="muted-date">1</td>
+                <td class="muted-date">2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       HUMAN-IN-THE-LOOP TRIAGE & DISPATCH MODAL
+       ========================================================= -->
+  <div class="modal-overlay" id="triageModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Triage & Dispatch Appointment</h3>
+        <button class="btn-close" onclick="closeTriageModal()">&times;</button>
+      </div>
+
+      <!-- Live summary of the intake data -->
+      <div class="triage-details">
+        <div class="triage-row">
+          <span class="triage-label">Reference ID:</span>
+          <span class="triage-val" id="modalRef">APT-XXXX</span>
+        </div>
+        <div class="triage-row">
+          <span class="triage-label">Patient Name:</span>
+          <span class="triage-val" id="modalPatient">Name</span>
+        </div>
+        <div class="triage-row">
+          <span class="triage-label">Requested Time:</span>
+          <span class="triage-val" id="modalTime">Date & Time</span>
+        </div>
+        <div class="triage-row">
+          <span class="triage-label">Patient Symptoms:</span>
+          <span class="triage-val" id="modalSymptoms">Symptom details</span>
+        </div>
+      </div>
+
+      <!-- Human Verification Form -->
+      <form id="triageForm">
+        <input type="hidden" id="modalAppointmentId" />
+
+        <div class="form-group">
+          <label for="triageDepartment">Verify Department Allocation</label>
+          <select id="triageDepartment" class="form-select" required>
+            <option value="General Medicine">General Medicine</option>
+            <option value="General Surgery">General Surgery</option>
+            <option value="Obstetrics and Gynaecology">Obstetrics and Gynaecology</option>
+            <option value="Endocrinology">Endocrinology</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Emergency Care">Emergency Care</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="triageDoctor">Assign Doctor</label>
+          <select id="triageDoctor" class="form-select" required>
+            <option value="1">Dr. Marttin Deo (General Medicine)</option>
+            <option value="2">Dr. Sarah Koomson (Endocrinology)</option>
+            <option value="3">Dr. Edward Cudjoe (Cardiology)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="triageUrgency">Clinical Urgency Assessment</label>
+          <select id="triageUrgency" class="form-select">
+            <option value="LOW">Low (Routine Checkup)</option>
+            <option value="MEDIUM">Medium (Symptomatic, Stable)</option>
+            <option value="HIGH">High (Urgent Attention Required)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="triageNote">Clinical Triage Note (Sent to Doctor)</label>
+          <textarea id="triageNote" class="form-textarea"
+            placeholder="e.g., Symptoms correlate with acute bronchial irritation. Prioritized for morning slot."></textarea>
+        </div>
+
+        <div class="modal-dispatch-actions">
+          <button type="button" class="btn-secondary" onclick="closeTriageModal()">Cancel</button>
+          <button type="submit" class="btn-confirm-dispatch">
+            Confirm & Dispatch Notifications (Doctor + Patient SMS)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Global Modal Bridge Functions -->
+  <script>
+    function openTriageModal(data) {
+      if (window.AppointmentActions) {
+        window.AppointmentActions.openTriage(data);
+      }
+    }
+
+    function closeTriageModal() {
+      if (window.AppointmentActions) {
+        window.AppointmentActions.closeModal();
+      } else {
+        const modal = document.getElementById('triageModal');
+        if (modal) modal.classList.remove('active');
+      }
+    }
+
+    function quickDecide(id, status) {
+      if (window.AppointmentActions) {
+        window.AppointmentActions.quickDecide(id, status);
+      }
+    }
+  </script>
+
+  <!-- Modular Application Scripts -->
+  <script src="doctorsData.js"></script>
+  <script src="Admin/js/api.js"></script>
+  <script src="Admin/js/appointment-actions.js"></script>
+  <script src="Admin/js/dashboard.js"></script>
+
+  <!-- Mobile Sidebar Toggle -->
+  <script>
+    function openSidebar() {
+      document.getElementById('mainSidebar').classList.add('open');
+      document.getElementById('sidebarBackdrop').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+      document.getElementById('mainSidebar').classList.remove('open');
+      document.getElementById('sidebarBackdrop').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSidebar();
+        closeTriageModal();
+      }
+    });
+  </script>
+</body>
+
+</html>
