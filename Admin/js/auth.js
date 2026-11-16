@@ -13,7 +13,7 @@
     CREDENTIAL_OVERRIDES: 'trustedcares_cred_overrides_v1'
   };
 
-  // Certified Hospital Staff Directory (SHA-256 hashed credentials)
+  // Certified Hospital Staff Directory (SHA-256 hashed credentials & Role Classifications)
   const DEFAULT_STAFF_DIRECTORY = [
     {
       id: 'doc-marttin',
@@ -21,6 +21,9 @@
       username: 'dr.marttin',
       email: 'marttin.deo@trustedcares.org',
       role: 'Lead Physician & Clinical Administrator',
+      roleType: 'doctor', // Clinical staff
+      approvalStatus: 'approved',
+      isActive: true,
       credentials: 'MBBS, FCPS - MD (Medicine), MCPS',
       department: 'General Medicine & Administration',
       avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80',
@@ -34,6 +37,9 @@
       username: 'dr.sarah',
       email: 'sarah.jenkins@trustedcares.org',
       role: 'Chief Medical Officer',
+      roleType: 'super_admin', // Executive Superadmin
+      approvalStatus: 'approved',
+      isActive: true,
       credentials: 'MD, FACP - Internal Medicine',
       department: 'Clinical Quality & Governance',
       avatar: 'https://images.unsplash.com/photo-1594824813511-c9902636a066?w=150&auto=format&fit=crop&q=80',
@@ -47,12 +53,31 @@
       username: 'admin',
       email: 'admin@trustedcares.org',
       role: 'System & Operations Director',
+      roleType: 'admin', // Operations Admin (Approved)
+      approvalStatus: 'approved',
+      isActive: true,
       credentials: 'MHA, CPHIMS - Clinical Informatics',
       department: 'Hospital Management & Systems',
       avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&auto=format&fit=crop&q=80',
       // SHA-256 of "Hospital@2026!"
       passwordHash: '5a0c3c1b1c185a4ba5d8f14895d6647b123b71f2246f804c38b6dd5385176569',
       demoPasswordHint: 'Hospital@2026!'
+    },
+    {
+      id: 'applicant-david',
+      name: 'Nurse David Kim (Applicant)',
+      username: 'david.nurse',
+      email: 'david.kim@trustedcares.org',
+      role: 'Clinical Nurse & Admin Applicant',
+      roleType: 'admin', // Admin Applicant (Pending Approval)
+      approvalStatus: 'pending',
+      isActive: true,
+      credentials: 'RN, BSN - Emergency Triage',
+      department: 'Emergency & Acute Care',
+      avatar: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=150&auto=format&fit=crop&q=80',
+      // SHA-256 of "Pending@2026!"
+      passwordHash: '0ad155402e20618fe1f841235173474721b66c279da3165c2823b02f9b3f7d80',
+      demoPasswordHint: 'Pending@2026!'
     }
   ];
 
@@ -312,6 +337,9 @@
           username: staff.username,
           email: staff.email,
           role: staff.role,
+          roleType: staff.roleType || 'admin',
+          approvalStatus: staff.approvalStatus || 'approved',
+          isActive: staff.isActive !== false,
           credentials: staff.credentials,
           department: staff.department,
           avatar: staff.avatar
@@ -375,16 +403,104 @@
     },
 
     /**
-     * Guard route for Admin pages: Redirects to login if unauthenticated
+     * Guard route for Admin pages: Enforces that ONLY approved administrators
+     * can access the dashboard and perform operations.
+     * 
+     * @param {string} redirectUrl - Fallback or target URL
+     * @param {Object} options - Access constraints
+     * @param {string[]} [options.allowedRoles=['admin', 'super_admin']] - Permitted roles
+     * @param {boolean} [options.requireApproved=true] - Must have approved status
      */
-    requireAuth(redirectUrl = 'admin_dashboard.html') {
+    requireAuth(redirectUrl = 'admin_dashboard.html', options = {}) {
+      const allowedRoles = options.allowedRoles || ['admin', 'super_admin'];
+      const requireApproved = options.requireApproved !== false;
+
       const session = this.getSession();
-      if (!session) {
-        const target = encodeURIComponent(redirectUrl || window.location.pathname);
+      const target = encodeURIComponent(redirectUrl || window.location.pathname);
+
+      // 1. Unauthenticated check
+      if (!session || !session.user) {
         window.location.replace(`loginpage.html?redirect=${target}&reason=session_required`);
         return false;
       }
+
+      const user = session.user;
+      const userRole = user.roleType || 'admin';
+      const approval = user.approvalStatus || 'approved';
+      const isActive = user.isActive !== false;
+
+      // 2. Active status check
+      if (!isActive) {
+        this.logout(false);
+        window.location.replace(`loginpage.html?redirect=${target}&reason=account_suspended&name=${encodeURIComponent(user.name)}`);
+        return false;
+      }
+
+      // 3. Role authorization check: Must be an admin or super_admin
+      if (!allowedRoles.includes(userRole)) {
+        window.location.replace(`loginpage.html?redirect=${target}&reason=unauthorized_admin_only&role=${encodeURIComponent(user.role || userRole)}`);
+        return false;
+      }
+
+      // 4. Verification/Approval check: Must be approved by Super Administrator
+      if (requireApproved && approval !== 'approved') {
+        window.location.replace(`loginpage.html?redirect=${target}&reason=approval_pending&name=${encodeURIComponent(user.name)}`);
+        return false;
+      }
+
       return true;
+    },
+
+    /**
+     * Check if currently authenticated user is an approved administrator
+     */
+    isApprovedAdmin() {
+      const session = this.getSession();
+      if (!session || !session.user) return false;
+      const u = session.user;
+      return (u.roleType === 'admin' || u.roleType === 'super_admin') &&
+             u.approvalStatus === 'approved' &&
+             u.isActive !== false;
+    },
+
+    /**
+     * Check if currently authenticated user is a super administrator
+     */
+    isSuperAdmin() {
+      const session = this.getSession();
+      if (!session || !session.user) return false;
+      const u = session.user;
+      return u.roleType === 'super_admin' &&
+             u.approvalStatus === 'approved' &&
+             u.isActive !== false;
+    },
+
+    /**
+     * Authorization Matrix: Verify permission to perform specific administrative tasks
+     */
+    canPerformTask(task) {
+      if (!this.isApprovedAdmin()) return false;
+      const session = this.getSession();
+      const isSuper = session.user.roleType === 'super_admin';
+
+      switch (task) {
+        case 'manage_appointments':
+        case 'update_appointment_status':
+        case 'view_department_roster':
+        case 'manage_doctor_schedules':
+        case 'view_dashboard_metrics':
+          return true; // Any approved admin or super_admin
+
+        case 'approve_admin':
+        case 'reject_admin':
+        case 'delete_records':
+        case 'system_audit_logs':
+        case 'configure_security':
+          return isSuper; // Superadmin only
+
+        default:
+          return false;
+      }
     },
 
     /**
@@ -532,6 +648,8 @@
         username: s.username,
         email: s.email,
         role: s.role,
+        roleType: s.roleType,
+        approvalStatus: s.approvalStatus,
         avatar: s.avatar,
         hintPassword: s.demoPasswordHint
       }));

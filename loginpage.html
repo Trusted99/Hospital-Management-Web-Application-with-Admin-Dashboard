@@ -672,15 +672,32 @@
         const staffList = Auth.getDemoStaff();
         demoStaffContainer.innerHTML = '';
 
-        staffList.slice(0, 2).forEach((staff, index) => {
+        staffList.forEach((staff, index) => {
           const chip = document.createElement('button');
           chip.type = 'button';
-          chip.className = `staff-demo-chip text-left p-2 rounded-xl flex items-center gap-2 ${index === 0 ? 'active' : ''}`;
+          chip.className = `staff-demo-chip text-left p-2 rounded-xl flex items-center gap-2 ${index === 2 ? 'active' : ''}`;
+          
+          let badgeColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+          let badgeLabel = 'Approved Admin';
+          if (staff.roleType === 'super_admin') {
+            badgeColor = 'text-purple-700 bg-purple-50 border-purple-200';
+            badgeLabel = 'Super Admin';
+          } else if (staff.roleType === 'doctor') {
+            badgeColor = 'text-blue-700 bg-blue-50 border-blue-200';
+            badgeLabel = 'Clinical Doctor';
+          } else if (staff.approvalStatus === 'pending') {
+            badgeColor = 'text-amber-700 bg-amber-50 border-amber-200';
+            badgeLabel = 'Pending Sign-Off';
+          }
+
           chip.innerHTML = `
             <img src="${staff.avatar}" alt="${Auth.sanitize(staff.name)}" class="w-7 h-7 rounded-full object-cover flex-shrink-0 border border-slate-200">
             <div class="min-w-0 flex-1">
-              <p class="text-[11px] font-bold text-slate-800 truncate">${Auth.sanitize(staff.name)}</p>
-              <p class="text-[9px] text-[#1d4ed8] font-semibold truncate">${Auth.sanitize(staff.role)}</p>
+              <div class="flex items-center justify-between gap-1">
+                <p class="text-[11px] font-bold text-slate-800 truncate">${Auth.sanitize(staff.name)}</p>
+                <span class="text-[8px] font-semibold px-1 py-0.2 rounded border ${badgeColor} whitespace-nowrap">${badgeLabel}</span>
+              </div>
+              <p class="text-[9px] text-[#1d4ed8] font-medium truncate">${Auth.sanitize(staff.role)}</p>
             </div>
           `;
 
@@ -690,7 +707,7 @@
             usernameInput.value = staff.name;
             passwordInput.value = staff.hintPassword;
             clearErrors();
-            showToast(`Filled credentials for ${staff.name}`, 'info');
+            showToast(`Filled credentials for ${staff.name} [${badgeLabel}]`, 'info');
           });
 
           demoStaffContainer.appendChild(chip);
@@ -810,18 +827,38 @@
       function checkSessionAndUrlParams() {
         const currentSession = Auth.getSession();
         if (currentSession && currentSession.user) {
+          const u = currentSession.user;
+          const isApprovedAdmin = (u.roleType === 'admin' || u.roleType === 'super_admin') && u.approvalStatus === 'approved';
           activeSessionBanner.classList.remove('hidden');
-          activeSessionText.textContent = `Signed in as ${currentSession.user.name} (${currentSession.user.role})`;
-          resumeSessionBtn.onclick = () => {
-            window.location.href = 'admin_dashboard.html';
-          };
+          activeSessionText.textContent = `Signed in: ${u.name} [${u.roleType === 'super_admin' ? 'Super Admin' : (u.roleType === 'admin' ? (u.approvalStatus === 'approved' ? 'Approved Admin' : 'Pending Sign-Off') : 'Doctor')}]`;
+          
+          if (isApprovedAdmin) {
+            resumeSessionBtn.textContent = 'Enter Dashboard →';
+            resumeSessionBtn.onclick = () => {
+              window.location.href = 'admin_dashboard.html';
+            };
+          } else {
+            resumeSessionBtn.textContent = 'Switch Account';
+            resumeSessionBtn.onclick = () => {
+              Auth.logout(true);
+            };
+          }
         }
 
         const urlParams = new URLSearchParams(window.location.search);
+        const reason = urlParams.get('reason');
         if (urlParams.get('logged_out') === '1') {
           showToast('You have been securely signed out from the portal.', 'info');
-        } else if (urlParams.get('reason') === 'session_required') {
+        } else if (reason === 'session_required') {
           showToast('Staff authentication required to view Admin Dashboard.', 'warning');
+        } else if (reason === 'unauthorized_admin_only') {
+          const role = urlParams.get('role') || 'Clinical User';
+          showToast(`Access Restricted: Only approved administrators have dashboard access. (${role})`, 'error');
+        } else if (reason === 'approval_pending') {
+          const name = urlParams.get('name') || 'Your account';
+          showToast(`Verification Required: ${name} is awaiting administrative sign-off by a Chief Medical Officer or Super Administrator.`, 'warning');
+        } else if (reason === 'account_suspended') {
+          showToast('Account Inactive: This administrator account has been deactivated. Please contact IT.', 'error');
         }
       }
       checkSessionAndUrlParams();
@@ -871,15 +908,39 @@
 
         // 4. Authenticate via Auth Engine
         signInBtn.disabled = true;
-        signInBtnText.textContent = 'Verifying credentials...';
+        signInBtnText.textContent = 'Verifying credentials & authorization...';
         signInSpinner.classList.remove('hidden');
 
         try {
           const authResult = await Auth.login(usernameVal, passVal, rememberMe.checked);
 
           if (authResult.success) {
-            showToast(`Welcome back, ${authResult.user.name}! Redirecting to Admin Dashboard...`, 'success');
-            signInBtnText.textContent = 'Authenticated. Loading...';
+            const user = authResult.user;
+
+            // Strict Access Rule Check 1: Role Authorization
+            if (user.roleType !== 'admin' && user.roleType !== 'super_admin') {
+              signInBtn.disabled = false;
+              signInBtnText.textContent = 'Sign in to Admin Dashboard';
+              signInSpinner.classList.add('hidden');
+              passwordErrorText.textContent = `Access Restricted: ${user.name} is classified as Clinical Medical Staff (${user.role}). Only approved hospital administrators may access the Admin Dashboard.`;
+              passwordError.classList.remove('hidden');
+              showToast(`Clinical staff accounts cannot access the administrative dashboard.`, 'warning');
+              return;
+            }
+
+            // Strict Access Rule Check 2: Approval Status Gate
+            if (user.approvalStatus !== 'approved') {
+              signInBtn.disabled = false;
+              signInBtnText.textContent = 'Sign in to Admin Dashboard';
+              signInSpinner.classList.add('hidden');
+              passwordErrorText.textContent = `Account Pending Verification: Your administrator account is awaiting sign-off by a Chief Medical Officer or Super Administrator before dashboard access can be granted.`;
+              passwordError.classList.remove('hidden');
+              showToast(`Administrative verification required before accessing dashboard.`, 'warning');
+              return;
+            }
+
+            showToast(`Welcome back, ${user.name}! Redirecting to Admin Dashboard...`, 'success');
+            signInBtnText.textContent = 'Authenticated. Loading Dashboard...';
             
             // Redirect to admin site (supporting return URL)
             setTimeout(() => {

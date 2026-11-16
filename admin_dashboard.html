@@ -20,8 +20,11 @@
   <!-- Authentication & Route Guard -->
   <script src="Admin/js/auth.js"></script>
   <script>
-    // Enforce authentication before dashboard renders
-    Auth.requireAuth('admin_dashboard.html');
+    // Enforce strict administrative authorization: Only approved admins allowed
+    Auth.requireAuth('admin_dashboard.html', {
+      allowedRoles: ['admin', 'super_admin'],
+      requireApproved: true
+    });
   </script>
 </head>
 
