@@ -16,6 +16,13 @@
   <link rel="stylesheet" href="Admin/css/admin/theme.css">
   <link rel="stylesheet" href="Admin/css/admin/layout.css">
   <link rel="stylesheet" href="Admin/css/admin/dashboard.css">
+
+  <!-- Authentication & Route Guard -->
+  <script src="Admin/js/auth.js"></script>
+  <script>
+    // Enforce authentication before dashboard renders
+    Auth.requireAuth('admin_dashboard.html');
+  </script>
 </head>
 
 <body>
@@ -37,11 +44,11 @@
     </button>
     <div class="doctor-profile">
       <div class="profile-avatar-wrap">
-        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80"
+        <img id="sidebarDoctorAvatar" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80"
           alt="Dr. Marttin Deo" />
       </div>
-      <h3 class="profile-name">Dr. Marttin Deo</h3>
-      <p class="profile-credentials">MBBS, FCPS - MD (Medicine), MCPS</p>
+      <h3 class="profile-name" id="sidebarDoctorName">Dr. Marttin Deo</h3>
+      <p class="profile-credentials" id="sidebarDoctorCreds">MBBS, FCPS - MD (Medicine), MCPS</p>
     </div>
 
     <ul class="nav-list">
@@ -115,7 +122,7 @@
         </a>
       </li>
       <li class="nav-item nav-logout">
-        <a href="index.html">
+        <a href="javascript:void(0);" id="logoutBtn" onclick="Auth.logout(true);" title="Secure Sign Out">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -675,6 +682,15 @@
   <script src="Admin/js/api.js"></script>
   <script src="Admin/js/appointment-actions.js"></script>
   <script src="Admin/js/dashboard.js"></script>
+
+  <!-- Initialize Authenticated Session UI -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.Auth) {
+        window.Auth.initDashboardProfile();
+      }
+    });
+  </script>
 
   <!-- Mobile Sidebar Toggle -->
   <script>
