@@ -10,7 +10,10 @@
   const STORAGE_KEYS = {
     SESSION: 'trusted_admin_session_v1',
     RATE_LIMIT: 'trustedcares_auth_ratelimit_v1',
-    CREDENTIAL_OVERRIDES: 'trustedcares_cred_overrides_v1'
+    CREDENTIAL_OVERRIDES: 'trustedcares_cred_overrides_v1',
+    CUSTOM_STAFF: 'trustedcares_custom_staff_v1',
+    STAFF_OVERRIDES: 'trustedcares_staff_overrides_v1',
+    DELETED_STAFF: 'trustedcares_deleted_staff_v1'
   };
 
   // Certified Hospital Staff Directory (SHA-256 hashed credentials & Role Classifications)
@@ -108,14 +111,59 @@
   }
 
   /**
-   * Safely load staff directory with local credential updates
+   * Safely load staff directory with custom entries, profile overrides, and credential updates
    */
   function getStaffDirectory() {
+    let list = [...DEFAULT_STAFF_DIRECTORY];
+
+    // 1. Filter out deleted staff
+    try {
+      const deletedRaw = localStorage.getItem(STORAGE_KEYS.DELETED_STAFF);
+      if (deletedRaw) {
+        const deletedIds = JSON.parse(deletedRaw);
+        if (Array.isArray(deletedIds)) {
+          list = list.filter(s => !deletedIds.includes(s.id));
+        }
+      }
+    } catch (e) {
+      console.warn('[Auth] Deleted staff read error:', e);
+    }
+
+    // 2. Load custom created staff
+    try {
+      const customRaw = localStorage.getItem(STORAGE_KEYS.CUSTOM_STAFF);
+      if (customRaw) {
+        const customList = JSON.parse(customRaw);
+        if (Array.isArray(customList)) {
+          list = [...list, ...customList];
+        }
+      }
+    } catch (e) {
+      console.warn('[Auth] Custom staff read error:', e);
+    }
+
+    // 3. Apply profile overrides (role, department, status, etc.)
+    try {
+      const staffOverridesRaw = localStorage.getItem(STORAGE_KEYS.STAFF_OVERRIDES);
+      if (staffOverridesRaw) {
+        const staffOverrides = JSON.parse(staffOverridesRaw);
+        list = list.map(s => {
+          if (staffOverrides[s.id]) {
+            return { ...s, ...staffOverrides[s.id] };
+          }
+          return s;
+        });
+      }
+    } catch (e) {
+      console.warn('[Auth] Staff overrides read error:', e);
+    }
+
+    // 4. Apply credential overrides
     try {
       const overridesRaw = localStorage.getItem(STORAGE_KEYS.CREDENTIAL_OVERRIDES);
       if (overridesRaw) {
         const overrides = JSON.parse(overridesRaw);
-        return DEFAULT_STAFF_DIRECTORY.map(staff => {
+        list = list.map(staff => {
           if (overrides[staff.email]) {
             return { ...staff, passwordHash: overrides[staff.email] };
           }
@@ -125,7 +173,8 @@
     } catch (e) {
       console.warn('[Auth] Could not read credential overrides:', e);
     }
-    return DEFAULT_STAFF_DIRECTORY;
+
+    return list;
   }
 
   /**
@@ -636,6 +685,206 @@
       } catch (err) {
         return { success: false, error: 'Unable to update password. Please try again.' };
       }
+    },
+
+    /**
+     * Retrieve all authorized personnel (READ)
+     */
+    getAllStaff() {
+      return getStaffDirectory();
+    },
+
+    /**
+     * Create & Onboard a new authorized staff member with dashboard access (CREATE)
+     */
+    async createStaffMember(data) {
+      if (!data || !data.name || !data.username || !data.email || !data.password) {
+        return { success: false, error: 'Name, username, email, and password are required fields.' };
+      }
+
+      const cleanUsername = sanitizeString(data.username.trim().toLowerCase());
+      const cleanEmail = sanitizeString(data.email.trim().toLowerCase());
+      const directory = getStaffDirectory();
+
+      if (directory.some(s => s.username.toLowerCase() === cleanUsername)) {
+        return { success: false, error: `Username "${cleanUsername}" is already assigned to a staff account.` };
+      }
+
+      if (directory.some(s => s.email.toLowerCase() === cleanEmail)) {
+        return { success: false, error: `Email "${cleanEmail}" is already registered.` };
+      }
+
+      const passwordHash = await computeSha256(data.password);
+      const newStaff = {
+        id: 'staff_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6),
+        name: sanitizeString(data.name.trim()),
+        username: cleanUsername,
+        email: cleanEmail,
+        role: sanitizeString(data.role || (data.roleType === 'super_admin' ? 'Chief Medical Officer' : (data.roleType === 'doctor' ? 'Clinical Doctor' : 'Hospital Administrator'))),
+        roleType: data.roleType || 'admin',
+        approvalStatus: data.approvalStatus || 'approved',
+        isActive: data.isActive !== false,
+        credentials: sanitizeString(data.credentials || (data.roleType === 'doctor' ? 'MD' : 'MHA - Hospital Admin')),
+        department: sanitizeString(data.department || 'Hospital Operations'),
+        avatar: data.avatar || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80`,
+        passwordHash,
+        demoPasswordHint: data.password,
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        let customStaff = [];
+        const raw = localStorage.getItem(STORAGE_KEYS.CUSTOM_STAFF);
+        if (raw) customStaff = JSON.parse(raw);
+        customStaff.push(newStaff);
+        localStorage.setItem(STORAGE_KEYS.CUSTOM_STAFF, JSON.stringify(customStaff));
+        return { success: true, staff: newStaff };
+      } catch (err) {
+        console.error('[Auth] Error saving new staff member:', err);
+        return { success: false, error: 'Could not persist staff record.' };
+      }
+    },
+
+    /**
+     * Update an authorized staff member's profile or credentials (UPDATE)
+     */
+    async updateStaffMember(id, updatedFields) {
+      if (!id || !updatedFields) return { success: false, error: 'Invalid update payload.' };
+
+      const directory = getStaffDirectory();
+      const existing = directory.find(s => s.id === id);
+      if (!existing) {
+        return { success: false, error: 'Staff member not found.' };
+      }
+
+      // Check username collision if changed
+      if (updatedFields.username) {
+        const cleanUser = sanitizeString(updatedFields.username.trim().toLowerCase());
+        if (cleanUser !== existing.username && directory.some(s => s.id !== id && s.username.toLowerCase() === cleanUser)) {
+          return { success: false, error: `Username "${cleanUser}" is already taken.` };
+        }
+      }
+
+      // Check email collision if changed
+      if (updatedFields.email) {
+        const cleanMail = sanitizeString(updatedFields.email.trim().toLowerCase());
+        if (cleanMail !== existing.email && directory.some(s => s.id !== id && s.email.toLowerCase() === cleanMail)) {
+          return { success: false, error: `Email "${cleanMail}" is already in use.` };
+        }
+      }
+
+      // If updating custom staff, update directly in custom staff storage
+      let customUpdated = false;
+      try {
+        const customRaw = localStorage.getItem(STORAGE_KEYS.CUSTOM_STAFF);
+        if (customRaw) {
+          let customList = JSON.parse(customRaw);
+          const idx = customList.findIndex(s => s.id === id);
+          if (idx !== -1) {
+            customList[idx] = { ...customList[idx], ...updatedFields };
+            if (updatedFields.password) {
+              customList[idx].passwordHash = await computeSha256(updatedFields.password);
+              customList[idx].demoPasswordHint = updatedFields.password;
+            }
+            localStorage.setItem(STORAGE_KEYS.CUSTOM_STAFF, JSON.stringify(customList));
+            customUpdated = true;
+          }
+        }
+      } catch (e) {}
+
+      // If not custom staff, save into staff overrides
+      if (!customUpdated) {
+        try {
+          let staffOverrides = {};
+          const stored = localStorage.getItem(STORAGE_KEYS.STAFF_OVERRIDES);
+          if (stored) staffOverrides = JSON.parse(stored);
+          staffOverrides[id] = { ...(staffOverrides[id] || {}), ...updatedFields };
+          localStorage.setItem(STORAGE_KEYS.STAFF_OVERRIDES, JSON.stringify(staffOverrides));
+
+          if (updatedFields.password) {
+            const hash = await computeSha256(updatedFields.password);
+            let credOverrides = {};
+            const storedCreds = localStorage.getItem(STORAGE_KEYS.CREDENTIAL_OVERRIDES);
+            if (storedCreds) credOverrides = JSON.parse(storedCreds);
+            credOverrides[existing.email] = hash;
+            localStorage.setItem(STORAGE_KEYS.CREDENTIAL_OVERRIDES, JSON.stringify(credOverrides));
+          }
+        } catch (e) {
+          console.warn('[Auth] Staff override storage failed:', e);
+        }
+      }
+
+      // If updating currently logged-in user, refresh session
+      const currentSession = this.getSession();
+      if (currentSession && currentSession.user && currentSession.user.id === id) {
+        currentSession.user = {
+          ...currentSession.user,
+          ...updatedFields,
+          name: updatedFields.name || currentSession.user.name,
+          role: updatedFields.role || currentSession.user.role,
+          roleType: updatedFields.roleType || currentSession.user.roleType,
+          approvalStatus: updatedFields.approvalStatus || currentSession.user.approvalStatus,
+          credentials: updatedFields.credentials || currentSession.user.credentials
+        };
+        try {
+          const serialized = JSON.stringify(currentSession);
+          sessionStorage.setItem(STORAGE_KEYS.SESSION, serialized);
+          if (localStorage.getItem(STORAGE_KEYS.SESSION)) {
+            localStorage.setItem(STORAGE_KEYS.SESSION, serialized);
+          }
+        } catch (e) {}
+        this.initDashboardProfile();
+      }
+
+      return { success: true };
+    },
+
+    /**
+     * Delete an authorized staff member (DELETE)
+     */
+    deleteStaffMember(id) {
+      if (!id) return { success: false, error: 'Staff ID is required.' };
+
+      const currentSession = this.getSession();
+      if (currentSession && currentSession.user && currentSession.user.id === id) {
+        return { success: false, error: 'Safety Guard: You cannot delete your own active administrator account.' };
+      }
+
+      try {
+        // Remove from custom staff if present
+        const customRaw = localStorage.getItem(STORAGE_KEYS.CUSTOM_STAFF);
+        if (customRaw) {
+          let customList = JSON.parse(customRaw);
+          customList = customList.filter(s => s.id !== id);
+          localStorage.setItem(STORAGE_KEYS.CUSTOM_STAFF, JSON.stringify(customList));
+        }
+
+        // Add to deleted staff registry
+        let deleted = [];
+        const deletedRaw = localStorage.getItem(STORAGE_KEYS.DELETED_STAFF);
+        if (deletedRaw) deleted = JSON.parse(deletedRaw);
+        if (!deleted.includes(id)) {
+          deleted.push(id);
+          localStorage.setItem(STORAGE_KEYS.DELETED_STAFF, JSON.stringify(deleted));
+        }
+
+        return { success: true };
+      } catch (err) {
+        console.error('[Auth] Error deleting staff member:', err);
+        return { success: false, error: 'Unable to remove staff member.' };
+      }
+    },
+
+    /**
+     * Quick Toggle Approval / Active Status
+     */
+    async toggleStaffStatus(id) {
+      const directory = getStaffDirectory();
+      const staff = directory.find(s => s.id === id);
+      if (!staff) return { success: false, error: 'Staff not found.' };
+
+      const newStatus = staff.approvalStatus === 'approved' ? 'pending' : 'approved';
+      return await this.updateStaffMember(id, { approvalStatus: newStatus });
     },
 
     /**

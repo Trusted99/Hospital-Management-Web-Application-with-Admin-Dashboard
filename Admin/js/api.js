@@ -5,7 +5,7 @@ const API = (function () {
   const BASE_URL = '/api';
   const STORAGE_KEY = 'trusted_cares_appointments';
 
-  // Initial seed data for pending review
+  // Initial seed data for booked appointments & tracking queue
   const initialPendingRequests = [
     {
       id: '101',
@@ -13,14 +13,18 @@ const API = (function () {
       patientName: 'Maria Sarafat',
       phone: '+233 24 555 0192',
       email: 'maria.sarafat@example.com',
+      gender: 'Female',
+      age: 32,
       department: 'General Medicine',
       doctorId: '1',
       doctorName: 'Dr. Marttin Deo',
       symptoms: 'Patient reports 4 days of cold with severe chest congestion and intermittent high fever.',
-      preferredTime: '19 Oct 2026 at 09:30 AM',
+      preferredDate: '2026-10-19',
+      preferredTime: '09:30 AM',
       urgency: 'HIGH',
       status: 'PENDING_REVIEW',
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80'
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-15T08:30:00Z'
     },
     {
       id: '102',
@@ -28,14 +32,132 @@ const API = (function () {
       patientName: 'Jhon Deo',
       phone: '+233 50 123 4567',
       email: 'jhon.deo@example.com',
+      gender: 'Male',
+      age: 45,
       department: 'Endocrinology',
       doctorId: '2',
       doctorName: 'Dr. Sarah Koomson',
       symptoms: 'Excessive night sweating, dizziness after carbohydrate-rich meals, persistent thirst.',
-      preferredTime: '19 Oct 2026 at 11:00 AM',
+      preferredDate: '2026-10-19',
+      preferredTime: '11:00 AM',
       urgency: 'MEDIUM',
       status: 'PENDING_REVIEW',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80'
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-15T10:15:00Z'
+    },
+    {
+      id: '103',
+      reference: 'APT-2026-S105',
+      patientName: 'Sanath Deo',
+      phone: '+233 20 888 3311',
+      email: 'sanath.deo@example.com',
+      gender: 'Male',
+      age: 37,
+      department: 'Cardiology',
+      doctorId: '3',
+      doctorName: 'Dr. Edward Cudjoe',
+      symptoms: 'Elevated systolic blood pressure (155/95), mild palpitations following light exertion.',
+      preferredDate: '2026-10-21',
+      preferredTime: '12:30 PM',
+      urgency: 'HIGH',
+      status: 'CONFIRMED',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-14T14:20:00Z'
+    },
+    {
+      id: '104',
+      reference: 'APT-2026-E441',
+      patientName: 'Emmanuel Adjei',
+      phone: '+233 27 777 9900',
+      email: 'emmanuel.adjei@example.com',
+      gender: 'Male',
+      age: 28,
+      department: 'Emergency Care',
+      doctorId: '1',
+      doctorName: 'Dr. Marttin Deo',
+      symptoms: 'Acute abdominal lower right quadrant sharp pain, nausea for 8 hours, rebound tenderness.',
+      preferredDate: '2026-10-19',
+      preferredTime: 'Immediate Triage',
+      urgency: 'EMERGENCY',
+      status: 'CONFIRMED',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-18T22:00:00Z'
+    },
+    {
+      id: '105',
+      reference: 'APT-2026-K330',
+      patientName: 'Komola Haris',
+      phone: '+233 55 444 2211',
+      email: 'komola.haris@example.com',
+      gender: 'Female',
+      age: 12,
+      department: 'Pediatrics',
+      doctorId: '2',
+      doctorName: 'Dr. Sarah Koomson',
+      symptoms: 'Recurrent seasonal allergies, rhinorrhea, mild ocular pruritus, no fever.',
+      preferredDate: '2026-10-21',
+      preferredTime: '01:30 PM',
+      urgency: 'LOW',
+      status: 'CONFIRMED',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-16T11:45:00Z'
+    },
+    {
+      id: '106',
+      reference: 'APT-2026-F219',
+      patientName: 'Fatima Bello',
+      phone: '+233 24 333 7788',
+      email: 'fatima.bello@example.com',
+      gender: 'Female',
+      age: 29,
+      department: 'Obstetrics and Gynaecology',
+      doctorId: '2',
+      doctorName: 'Dr. Sarah Koomson',
+      symptoms: 'Routine second-trimester prenatal sonogram follow-up and maternal glucose screening.',
+      preferredDate: '2026-10-17',
+      preferredTime: '10:00 AM',
+      urgency: 'LOW',
+      status: 'COMPLETED',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-10T09:00:00Z'
+    },
+    {
+      id: '107',
+      reference: 'APT-2026-R772',
+      patientName: 'Robert Mensah',
+      phone: '+233 20 111 6655',
+      email: 'robert.mensah@example.com',
+      gender: 'Male',
+      age: 52,
+      department: 'Orthopedics',
+      doctorId: '3',
+      doctorName: 'Dr. Edward Cudjoe',
+      symptoms: 'Post-operative right knee arthroscopy rehabilitation evaluation, reduced mobility.',
+      preferredDate: '2026-10-16',
+      preferredTime: '03:00 PM',
+      urgency: 'MEDIUM',
+      status: 'COMPLETED',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-09T16:30:00Z'
+    },
+    {
+      id: '108',
+      reference: 'APT-2026-A583',
+      patientName: 'Abena Osei',
+      phone: '+233 50 999 4433',
+      email: 'abena.osei@example.com',
+      gender: 'Female',
+      age: 24,
+      department: 'Dermatology',
+      doctorId: '1',
+      doctorName: 'Dr. Marttin Deo',
+      symptoms: 'Contact dermatitis on lateral forearm following detergent exposure.',
+      preferredDate: '2026-10-18',
+      preferredTime: '11:30 AM',
+      urgency: 'LOW',
+      status: 'CANCELLED',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80',
+      createdAt: '2026-10-12T13:10:00Z'
     }
   ];
 
@@ -192,6 +314,33 @@ const API = (function () {
     getDashboardSummary: () => request('/admin/dashboard/summary'),
     getTodaySchedule: () => request('/admin/appointments/today'),
     getPendingRequests: () => request('/admin/appointments?status=PENDING_REVIEW'),
+    getAllAppointments: () => Promise.resolve(getStoredAppointments()),
+    addAppointment: (appt) => {
+      const list = getStoredAppointments();
+      const newAppt = {
+        id: 'apt_' + Date.now(),
+        reference: 'APT-2026-' + Math.random().toString(36).substring(2, 6).toUpperCase(),
+        status: 'PENDING_REVIEW',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80',
+        createdAt: new Date().toISOString(),
+        ...appt
+      };
+      list.unshift(newAppt);
+      saveStoredAppointments(list);
+      return Promise.resolve(newAppt);
+    },
+    updateAppointment: (id, fields) => {
+      const list = getStoredAppointments();
+      const updated = list.map(item => String(item.id) === String(id) ? { ...item, ...fields, updatedAt: new Date().toISOString() } : item);
+      saveStoredAppointments(updated);
+      return Promise.resolve({ success: true });
+    },
+    deleteAppointment: (id) => {
+      const list = getStoredAppointments();
+      const filtered = list.filter(item => String(item.id) !== String(id));
+      saveStoredAppointments(filtered);
+      return Promise.resolve({ success: true });
+    },
     triageAppointment: (id, payload) =>
       request(`/admin/appointments/${id}/triage`, {
         method: 'POST',

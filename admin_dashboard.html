@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="Admin/css/admin/theme.css">
   <link rel="stylesheet" href="Admin/css/admin/layout.css">
   <link rel="stylesheet" href="Admin/css/admin/dashboard.css">
+  <link rel="stylesheet" href="Admin/css/admin/admin-views.css">
 
   <!-- Authentication & Route Guard -->
   <script src="Admin/js/auth.js"></script>
@@ -55,8 +56,8 @@
     </div>
 
     <ul class="nav-list">
-      <li class="nav-item active">
-        <a href="admin_dashboard.html">
+      <li class="nav-item active" data-view="dashboard">
+        <a href="javascript:void(0);" onclick="window.AdminViews.switchView('dashboard')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
@@ -67,8 +68,8 @@
           Dashboard
         </a>
       </li>
-      <li class="nav-item">
-        <a href="#appointmentsQueue">
+      <li class="nav-item" data-view="appointments">
+        <a href="javascript:void(0);" onclick="window.AdminViews.switchView('appointments')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -80,7 +81,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="index.html" target="_blank">
+        <a href="index.html" target="_blank" title="Open Public Patient Intake Form">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -92,18 +93,8 @@
           Public Intake
         </a>
       </li>
-      <li class="nav-item">
-        <a href="#payment">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
-          Payment
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#profile">
+      <li class="nav-item" data-view="profile">
+        <a href="javascript:void(0);" onclick="window.AdminViews.switchView('profile')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -112,8 +103,8 @@
           Profile
         </a>
       </li>
-      <li class="nav-item">
-        <a href="#settings">
+      <li class="nav-item" data-view="settings">
+        <a href="javascript:void(0);" onclick="window.AdminViews.switchView('settings')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
@@ -182,7 +173,7 @@
       </div>
     </header>
 
-    <div class="dashboard-grid">
+    <div class="dashboard-grid" id="viewDashboard">
       <!-- 1. Row: Top Stat Cards -->
       <section class="stat-row">
         <div class="stat-card">
@@ -317,7 +308,7 @@
               <span class="time-badge">01:30 PM</span>
             </div>
           </div>
-          <a href="#appointmentsQueue" class="see-all-link">See All</a>
+          <a href="javascript:void(0);" onclick="window.AdminViews.switchView('appointments')" class="see-all-link">See All Bookings</a>
         </div>
 
         <!-- Next Patient Details (Focus Card) -->
@@ -501,7 +492,7 @@
               </div>
             </div>
           </div>
-          <a href="appointments.html?status=PENDING_REVIEW" class="see-all-link">See All Requests</a>
+          <a href="javascript:void(0);" onclick="window.AdminViews.switchView('appointments')" class="see-all-link">See All Bookings</a>
         </div>
 
         <!-- Mini Calendar -->
@@ -572,6 +563,281 @@
           </table>
         </div>
       </section>
+    </div>
+
+    <!-- =========================================================
+         VIEW 2: DEDICATED BOOKED APPOINTMENTS TRACKER
+         ========================================================= -->
+    <div class="admin-view" id="viewAppointments">
+      <div class="view-header">
+        <div class="view-header-content">
+          <h2>Booked Appointments Queue & Triage Tracker</h2>
+          <p>Real-time clinical queue management. Monitor, confirm, reschedule, or triage incoming patient bookings.</p>
+        </div>
+        <div class="view-header-actions">
+          <button class="btn-primary-action" onclick="window.AdminViews.switchView('dashboard')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar with Status Filter Pills & Search -->
+      <div class="view-toolbar">
+        <div class="filter-pills" id="apptFilterPills">
+          <button class="filter-pill active" onclick="window.AdminViews.setApptFilter('ALL', this)">
+            All Bookings <span class="pill-count" id="countAllAppts">0</span>
+          </button>
+          <button class="filter-pill" onclick="window.AdminViews.setApptFilter('PENDING_REVIEW', this)">
+            Pending Triage <span class="pill-count" id="countPendingAppts">0</span>
+          </button>
+          <button class="filter-pill" onclick="window.AdminViews.setApptFilter('CONFIRMED', this)">
+            Confirmed <span class="pill-count" id="countConfirmedAppts">0</span>
+          </button>
+          <button class="filter-pill" onclick="window.AdminViews.setApptFilter('COMPLETED', this)">
+            Completed <span class="pill-count" id="countCompletedAppts">0</span>
+          </button>
+          <button class="filter-pill" onclick="window.AdminViews.setApptFilter('CANCELLED', this)">
+            Cancelled <span class="pill-count" id="countCancelledAppts">0</span>
+          </button>
+        </div>
+
+        <div class="toolbar-controls">
+          <div class="toolbar-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="apptSearchInput" placeholder="Filter patients, ref, doctor..." oninput="window.AdminViews.renderAppointments()" />
+          </div>
+          
+          <select id="apptUrgencyFilter" class="toolbar-select" onchange="window.AdminViews.renderAppointments()">
+            <option value="ALL">All Urgencies</option>
+            <option value="EMERGENCY">Emergency (Critical)</option>
+            <option value="HIGH">High Urgency</option>
+            <option value="MEDIUM">Medium Urgency</option>
+            <option value="LOW">Low (Routine)</option>
+          </select>
+
+          <select id="apptDeptFilter" class="toolbar-select" onchange="window.AdminViews.renderAppointments()">
+            <option value="ALL">All Departments</option>
+            <option value="General Medicine">General Medicine</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Endocrinology">Endocrinology</option>
+            <option value="Emergency Care">Emergency Care</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Obstetrics and Gynaecology">Obstetrics & Gyn</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Dermatology">Dermatology</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modern Appointments Table Card -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Booking Ref & Slot</th>
+                <th>Patient Details</th>
+                <th>Department & Physician</th>
+                <th>Urgency</th>
+                <th>Symptoms / Triage Note</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentsTableBody">
+              <!-- Rendered dynamically via AdminViews.renderAppointments() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         VIEW 3: AUTHORIZED PERSONNEL & PROFILE DIRECTORY (CRUD)
+         ========================================================= -->
+    <div class="admin-view" id="viewProfile">
+      <div class="view-header">
+        <div class="view-header-content">
+          <h2>Authorized Staff & Profiles Directory</h2>
+          <p>Full administrative lifecycle management (Create, Read, Update, Delete) of staff members authorized to access the system.</p>
+        </div>
+        <div class="view-header-actions">
+          <button class="btn-primary-action" onclick="window.AdminViews.openModal('createStaffModal')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            + Add Authorized Person
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar with Role & Status Filters -->
+      <div class="view-toolbar">
+        <div class="filter-pills" id="staffRoleFilterPills">
+          <button class="filter-pill active" onclick="window.AdminViews.setStaffRoleFilter('ALL', this)">All Staff</button>
+          <button class="filter-pill" onclick="window.AdminViews.setStaffRoleFilter('admin', this)">Hospital Admins</button>
+          <button class="filter-pill" onclick="window.AdminViews.setStaffRoleFilter('super_admin', this)">Super Admins</button>
+          <button class="filter-pill" onclick="window.AdminViews.setStaffRoleFilter('doctor', this)">Clinical Doctors</button>
+        </div>
+
+        <div class="toolbar-controls">
+          <div class="toolbar-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="staffSearchInput" placeholder="Search staff name, email, credentials..." oninput="window.AdminViews.renderStaff()" />
+          </div>
+
+          <div class="filter-pills" id="staffStatusFilterPills">
+            <button class="filter-pill active" onclick="window.AdminViews.setStaffStatusFilter('ALL', this)">All Statuses</button>
+            <button class="filter-pill" onclick="window.AdminViews.setStaffStatusFilter('approved', this)">Approved</button>
+            <button class="filter-pill" onclick="window.AdminViews.setStaffStatusFilter('pending', this)">Pending Sign-Off</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Profiles Grid (Read & Actions) -->
+      <div class="staff-cards-grid" id="staffCardsContainer">
+        <!-- Rendered dynamically via AdminViews.renderStaff() -->
+      </div>
+    </div>
+
+    <!-- =========================================================
+         VIEW 4: SETTINGS & ONBOARDING (ADD NEW PEOPLE FOR DASHBOARD)
+         ========================================================= -->
+    <div class="admin-view" id="viewSettings">
+      <div class="view-header">
+        <div class="view-header-content">
+          <h2>Admin Settings & System Governance</h2>
+          <p>Onboard new administrators with dashboard access privileges and manage security policies.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid-layout">
+        <!-- Left: Quick-Provision New Authorized Person -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            Add New Person to Dashboard
+          </h3>
+          <p class="settings-card-desc">
+            Instantly grant hospital administrators, executives, or medical leads access to this dashboard. They can immediately log in on the login portal.
+          </p>
+
+          <form id="settingsOnboardForm" class="settings-form-grid">
+            <div>
+              <label class="settings-label" for="onboardFullName">Full Name *</label>
+              <input type="text" id="onboardFullName" class="settings-input" placeholder="e.g. Dr. Michael Owusu" required />
+            </div>
+
+            <div>
+              <label class="settings-label" for="onboardUsername">Staff Username *</label>
+              <input type="text" id="onboardUsername" class="settings-input" placeholder="e.g. michael.admin" required />
+            </div>
+
+            <div class="form-field-full">
+              <label class="settings-label" for="onboardEmail">Hospital Email Address *</label>
+              <input type="email" id="onboardEmail" class="settings-input" placeholder="e.g. michael.owusu@trustedcares.org" required />
+            </div>
+
+            <div>
+              <label class="settings-label" for="onboardRoleType">System Role & Access Level *</label>
+              <select id="onboardRoleType" class="settings-select" required>
+                <option value="admin">Hospital Administrator (Full Dashboard Access)</option>
+                <option value="super_admin">Super Administrator (Executive & Approvals)</option>
+                <option value="doctor">Clinical Doctor (Patient & Schedule Access)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="settings-label" for="onboardDepartment">Department Allocation</label>
+              <select id="onboardDepartment" class="settings-select">
+                <option value="Hospital Operations">Hospital Operations & Systems</option>
+                <option value="Clinical Quality & Governance">Clinical Quality & Governance</option>
+                <option value="General Medicine">General Medicine</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Emergency Care">Emergency Care</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Endocrinology">Endocrinology</option>
+                <option value="Obstetrics and Gynaecology">Obstetrics & Gynaecology</option>
+                <option value="Orthopedics">Orthopedics</option>
+              </select>
+            </div>
+
+            <div class="form-field-full">
+              <label class="settings-label" for="onboardCredentials">Professional Credentials</label>
+              <input type="text" id="onboardCredentials" class="settings-input" placeholder="e.g. MHA, CPHIMS - Clinical Operations" />
+            </div>
+
+            <div class="form-field-full">
+              <label class="settings-label" for="onboardPassword">Access Password *</label>
+              <div class="password-input-wrap">
+                <input type="text" id="onboardPassword" class="settings-input" value="Hospital@2026!" required />
+                <button type="button" class="btn-generate-pwd" onclick="window.AdminViews.generateRandomPassword('onboardPassword')">Generate</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="settings-label" for="onboardApprovalStatus">Initial Approval Status</label>
+              <select id="onboardApprovalStatus" class="settings-select">
+                <option value="approved">Approved Immediately (Instant Access)</option>
+                <option value="pending">Pending Sign-off (Awaiting CMO Review)</option>
+              </select>
+            </div>
+
+            <div class="form-field-full" style="margin-top: 10px;">
+              <button type="submit" class="btn-primary-action" style="width: 100%; justify-content: center; padding: 12px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                Provision & Grant Dashboard Access
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Governance, Security & Active Session -->
+        <div class="space-y-6">
+          <div class="settings-card">
+            <h3 class="settings-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Current Active Administrator
+            </h3>
+            <p class="settings-card-desc">Currently authenticated session profile</p>
+
+            <div class="info-block">
+              <div class="info-block-header">
+                <span id="settingsCurrentAdminName">Dr. Marttin Deo</span>
+                <span class="role-tag role-admin" id="settingsCurrentAdminRole">Admin</span>
+              </div>
+              <p class="info-block-desc" id="settingsCurrentAdminEmail">marttin.deo@trustedcares.org</p>
+            </div>
+
+            <div class="info-block">
+              <div class="info-block-header">
+                <span>Session Security</span>
+                <span style="color: #059669; font-size: 0.75rem;">Active</span>
+              </div>
+              <p class="info-block-desc">
+                Authenticated via SHA-256 Web Crypto with progressive multi-tab brute force lockout protection.
+              </p>
+            </div>
+          </div>
+
+          <div class="settings-card" style="margin-top: 20px;">
+            <h3 class="settings-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Database Architecture
+            </h3>
+            <p class="settings-card-desc">Supabase Postgres 17.6 connected instance</p>
+
+            <div class="info-block">
+              <div class="info-block-header">
+                <span>Row Level Security (RLS)</span>
+                <span style="color: #059669; font-size: 0.75rem;">12/12 Tables Protected</span>
+              </div>
+              <p class="info-block-desc">
+                Public access is blocked from all administrative views. Only verified <code>is_admin()</code> callers can execute operational procedures.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -685,6 +951,151 @@
   <script src="Admin/js/api.js"></script>
   <script src="Admin/js/appointment-actions.js"></script>
   <script src="Admin/js/dashboard.js"></script>
+  <script src="Admin/js/admin-views.js"></script>
+
+  <!-- =========================================================
+       MODAL 1: ADD AUTHORIZED PERSONNEL (CREATE)
+       ========================================================= -->
+  <div class="admin-modal-overlay" id="createStaffModal">
+    <div class="admin-modal-container">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title">+ Add New Authorized Person</h3>
+        <button class="btn-close" type="button" onclick="window.AdminViews.closeModal('createStaffModal')">&times;</button>
+      </div>
+      <form id="modalCreateStaffForm">
+        <div class="admin-modal-body">
+          <div class="settings-form-grid">
+            <div>
+              <label class="settings-label" for="mCreateName">Full Name *</label>
+              <input type="text" id="mCreateName" class="settings-input" placeholder="e.g. Dr. Kwame Mensah" required />
+            </div>
+            <div>
+              <label class="settings-label" for="mCreateUsername">Username *</label>
+              <input type="text" id="mCreateUsername" class="settings-input" placeholder="e.g. kwame.admin" required />
+            </div>
+            <div class="form-field-full">
+              <label class="settings-label" for="mCreateEmail">Hospital Email Address *</label>
+              <input type="email" id="mCreateEmail" class="settings-input" placeholder="e.g. kwame.mensah@trustedcares.org" required />
+            </div>
+            <div>
+              <label class="settings-label" for="mCreateRoleType">Access Role *</label>
+              <select id="mCreateRoleType" class="settings-select" required>
+                <option value="admin">Hospital Administrator (Full Dashboard)</option>
+                <option value="super_admin">Super Administrator (CMO / Lead)</option>
+                <option value="doctor">Clinical Doctor (Patient Queue)</option>
+              </select>
+            </div>
+            <div>
+              <label class="settings-label" for="mCreateDepartment">Department</label>
+              <select id="mCreateDepartment" class="settings-select">
+                <option value="General Medicine">General Medicine</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Emergency Care">Emergency Care</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Endocrinology">Endocrinology</option>
+                <option value="Hospital Operations">Hospital Operations</option>
+              </select>
+            </div>
+            <div class="form-field-full">
+              <label class="settings-label" for="mCreateCredentials">Credentials</label>
+              <input type="text" id="mCreateCredentials" class="settings-input" placeholder="e.g. MBBS, FCPS - Clinical Director" />
+            </div>
+            <div class="form-field-full">
+              <label class="settings-label" for="mCreatePassword">Initial Password *</label>
+              <div class="password-input-wrap">
+                <input type="text" id="mCreatePassword" class="settings-input" value="Hospital@2026!" required />
+                <button type="button" class="btn-generate-pwd" onclick="window.AdminViews.generateRandomPassword('mCreatePassword')">Generate</button>
+              </div>
+            </div>
+            <div>
+              <label class="settings-label" for="mCreateApprovalStatus">Approval Status</label>
+              <select id="mCreateApprovalStatus" class="settings-select">
+                <option value="approved">Approved Immediately</option>
+                <option value="pending">Pending Sign-off</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-secondary-action" onclick="window.AdminViews.closeModal('createStaffModal')">Cancel</button>
+          <button type="submit" class="btn-primary-action">Create Authorized Staff</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 2: EDIT AUTHORIZED PERSONNEL (UPDATE)
+       ========================================================= -->
+  <div class="admin-modal-overlay" id="editStaffModal">
+    <div class="admin-modal-container">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title">Edit Staff Profile & Authorization</h3>
+        <button class="btn-close" type="button" onclick="window.AdminViews.closeModal('editStaffModal')">&times;</button>
+      </div>
+      <form id="editStaffForm">
+        <input type="hidden" id="editStaffId" />
+        <div class="admin-modal-body">
+          <div class="settings-form-grid">
+            <div>
+              <label class="settings-label" for="editStaffName">Full Name *</label>
+              <input type="text" id="editStaffName" class="settings-input" required />
+            </div>
+            <div>
+              <label class="settings-label" for="editStaffUsername">Username *</label>
+              <input type="text" id="editStaffUsername" class="settings-input" required />
+            </div>
+            <div class="form-field-full">
+              <label class="settings-label" for="editStaffEmail">Hospital Email *</label>
+              <input type="email" id="editStaffEmail" class="settings-input" required />
+            </div>
+            <div>
+              <label class="settings-label" for="editStaffRoleType">Access Role</label>
+              <select id="editStaffRoleType" class="settings-select">
+                <option value="admin">Hospital Administrator (Dashboard Access)</option>
+                <option value="super_admin">Super Administrator (Executive)</option>
+                <option value="doctor">Clinical Doctor (Doctor Schedule)</option>
+              </select>
+            </div>
+            <div>
+              <label class="settings-label" for="editStaffDepartment">Department</label>
+              <select id="editStaffDepartment" class="settings-select">
+                <option value="General Medicine">General Medicine</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Emergency Care">Emergency Care</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Endocrinology">Endocrinology</option>
+                <option value="Hospital Operations">Hospital Operations</option>
+                <option value="Clinical Quality & Governance">Clinical Quality & Governance</option>
+              </select>
+            </div>
+            <div class="form-field-full">
+              <label class="settings-label" for="editStaffCredentials">Professional Credentials</label>
+              <input type="text" id="editStaffCredentials" class="settings-input" />
+            </div>
+            <div>
+              <label class="settings-label" for="editStaffApprovalStatus">Approval Status</label>
+              <select id="editStaffApprovalStatus" class="settings-select">
+                <option value="approved">Approved (Active Access)</option>
+                <option value="pending">Pending Sign-off</option>
+                <option value="rejected">Suspended / Deactivated</option>
+              </select>
+            </div>
+            <div>
+              <label class="settings-label" for="editStaffNewPassword">Reset Password (Optional)</label>
+              <input type="password" id="editStaffNewPassword" class="settings-input" placeholder="Leave blank to keep current" />
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-secondary-action" onclick="window.AdminViews.closeModal('editStaffModal')">Cancel</button>
+          <button type="submit" class="btn-primary-action">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Initialize Authenticated Session UI -->
   <script>
